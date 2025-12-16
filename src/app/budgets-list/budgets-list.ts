@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Budgets } from '../models/budgets';
 
@@ -11,7 +11,11 @@ import { Budgets } from '../models/budgets';
 export class BudgetsList {
   budgets = signal<Budgets[]>([]);
   budgetForm: FormGroup;
-  selectedBudgets: string[] = [];
+  selectedBudgets = signal<Budgets[]>([]);
+
+  total = computed(() => {
+    return this.selectedBudgets().reduce((sum, budget) => sum + budget.price, 0);
+  });
 
   constructor() {
     this.budgetForm = new FormGroup({
@@ -21,14 +25,14 @@ export class BudgetsList {
     });
 
     this.budgetForm.valueChanges.subscribe((values) => {
-      this.selectedBudgets = [];
+      const selected: Budgets[] = [];
 
-      if (values.seo) this.selectedBudgets.push('seo');
-      if (values.ads) this.selectedBudgets.push('ads');
-      if (values.web) this.selectedBudgets.push('web');
+      if (values.seo) selected.push({ name: 'seo', price: 300 });
+      if (values.ads) selected.push({ name: 'ads', price: 400 });
+      if (values.web) selected.push({ name: 'web', price: 500 });
 
-      console.log('Clicked:', this.selectedBudgets);
-      console.log(this.selectedBudgets);
+      this.selectedBudgets.set(selected);
+      console.log('Clicked:', this.selectedBudgets(), 'Total:', this.total());
     });
   }
 }
