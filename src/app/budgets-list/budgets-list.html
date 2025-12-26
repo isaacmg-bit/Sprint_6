@@ -1,21 +1,21 @@
 <div class="max-w-2xl w-full mx-auto">
   <form [formGroup]="budgetForm" class="space-y-4">
-    @for (service of services; track service.id) {
+    @for (budget of budgets(); track budget.id) {
     <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-6">
       <div class="flex items-center justify-between">
         <div class="flex-1">
-          <h3 class="text-gray-900 font-bold text-xl mb-1">{{ service.name }}</h3>
-          <p class="text-gray-500 text-sm leading-tight">{{ service.description }}</p>
+          <h3 class="text-gray-900 font-bold text-xl mb-1">{{ budget.name }}</h3>
+          <p class="text-gray-500 text-sm leading-tight">{{ budget.description }}</p>
         </div>
         <div class="flex items-center gap-12">
           <span class="text-gray-900 font-bold text-4xl"
-            >{{ service.price }}<span class="text-gray-400 text-2xl">€</span></span
+            >{{ budget.price }}<span class="text-gray-400 text-2xl">€</span></span
           >
           <label class="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
-              [id]="service.id"
-              [formControlName]="service.control"
+              [id]="budget.id"
+              [formControlName]="budget.control"
               class="w-4 h-4"
             />
             <span class="text-gray-600 text-sm">Afegir</span>
@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      @if (service.control === 'web' && budgetForm.get('web')?.value) {
+      @if (budget.control === 'web' && budgetForm.get('web')?.value) {
       <div class="flex justify-end"><app-panel></app-panel></div>
       }
     </div>

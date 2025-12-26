@@ -11,10 +11,31 @@ import { Panel } from '../panel/panel';
   styleUrl: './budgets-list.css',
 })
 export class BudgetsList {
-  budgets = signal<Budgets[]>([]);
+  budgets = signal<Budgets[]>([
+    {
+      id: 'seo-budget',
+      name: 'Seo',
+      price: 300,
+      control: 'seo',
+      description: "Programació d'una web responsive completa",
+    },
+    {
+      id: 'ads-budget',
+      name: 'Ads',
+      price: 400,
+      control: 'ads',
+      description: "Programació d'una web responsive completa",
+    },
+    {
+      id: 'web-budget',
+      name: 'Web',
+      price: 500,
+      control: 'web',
+      description: "Programació d'una web responsive completa",
+    },
+  ]);
   budgetForm: FormGroup;
   selectedBudgets = signal<Budgets[]>([]);
-  services: any[];
 
   total = computed(() => {
     const basePrice = this.selectedBudgets().reduce((sum, budget) => sum + budget.price, 0);
@@ -24,30 +45,6 @@ export class BudgetsList {
   });
 
   constructor(private budgetService: Budget) {
-    this.services = [
-      {
-        id: 'seo-budget',
-        name: 'Seo',
-        description: "Programació d'una web responsive completa",
-        price: 300,
-        control: 'seo',
-      },
-      {
-        id: 'ads-budget',
-        name: 'Ads',
-        description: "Programació d'una web responsive completa",
-        price: 400,
-        control: 'ads',
-      },
-      {
-        id: 'web-budget',
-        name: 'Web',
-        description: "Programació d'una web responsive completa",
-        price: 500,
-        control: 'web',
-      },
-    ];
-
     this.budgetForm = new FormGroup({
       seo: new FormControl(false),
       ads: new FormControl(false),
@@ -55,13 +52,9 @@ export class BudgetsList {
     });
 
     this.budgetForm.valueChanges.subscribe((values) => {
-      const selected: Budgets[] = [];
+      const selected = this.budgets().filter((service) => values[service.control]);
 
-      if (values.seo) selected.push({ name: 'seo', price: 300 });
-      if (values.ads) selected.push({ name: 'ads', price: 400 });
-      if (values.web) {
-        selected.push({ name: 'web', price: 500 });
-      } else {
+      if (!values.web) {
         this.budgetService.resetWebExtra();
       }
 
