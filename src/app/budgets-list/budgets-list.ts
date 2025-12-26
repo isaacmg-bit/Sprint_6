@@ -12,12 +12,37 @@ export class BudgetsList {
   budgets = signal<Budgets[]>([]);
   budgetForm: FormGroup;
   selectedBudgets = signal<Budgets[]>([]);
+  services: any[];
 
   total = computed(() => {
     return this.selectedBudgets().reduce((sum, budget) => sum + budget.price, 0);
   });
 
   constructor() {
+    this.services = [
+      {
+        id: 'seo-budget',
+        name: 'Seo',
+        description: "Programació d'una web responsive completa",
+        price: 300,
+        control: 'seo',
+      },
+      {
+        id: 'ads-budget',
+        name: 'Ads',
+        description: "Programació d'una web responsive completa",
+        price: 400,
+        control: 'ads',
+      },
+      {
+        id: 'web-budget',
+        name: 'Web',
+        description: "Programació d'una web responsive completa",
+        price: 500,
+        control: 'web',
+      },
+    ];
+
     this.budgetForm = new FormGroup({
       seo: new FormControl(false),
       ads: new FormControl(false),
