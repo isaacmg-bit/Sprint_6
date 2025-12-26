@@ -1,10 +1,12 @@
 import { Component, signal, computed } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Budget } from '../services/budget';
 import { Budgets } from '../models/budgets';
+import { Panel } from '../panel/panel';
 
 @Component({
   selector: 'app-budgets-list',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Panel],
   templateUrl: './budgets-list.html',
   styleUrl: './budgets-list.css',
 })
@@ -15,10 +17,13 @@ export class BudgetsList {
   services: any[];
 
   total = computed(() => {
-    return this.selectedBudgets().reduce((sum, budget) => sum + budget.price, 0);
+    const basePrice = this.selectedBudgets().reduce((sum, budget) => sum + budget.price, 0);
+    const extraWebPrice = this.budgetService.webExtra();
+
+    return basePrice + extraWebPrice;
   });
 
-  constructor() {
+  constructor(private budgetService: Budget) {
     this.services = [
       {
         id: 'seo-budget',
@@ -54,7 +59,11 @@ export class BudgetsList {
 
       if (values.seo) selected.push({ name: 'seo', price: 300 });
       if (values.ads) selected.push({ name: 'ads', price: 400 });
-      if (values.web) selected.push({ name: 'web', price: 500 });
+      if (values.web) {
+        selected.push({ name: 'web', price: 500 });
+      } else {
+        this.budgetService.resetWebExtra();
+      }
 
       this.selectedBudgets.set(selected);
       console.log('Clicked:', this.selectedBudgets(), 'Total:', this.total());

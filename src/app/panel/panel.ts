@@ -22,7 +22,7 @@ export class Panel {
       const pages = values.pages ?? this.MIN_PAG;
       const languages = values.languages ?? this.MIN_LANG;
 
-      const price = this.budgetService.calculateWeb(pages, languages);
+      const price = this.budgetService.calculateWebExtra(pages, languages);
 
       this.budgetService.webExtra.set(price);
     });
