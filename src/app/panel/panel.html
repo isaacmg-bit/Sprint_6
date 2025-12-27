@@ -6,57 +6,33 @@
     <label class="font-semibold text-gray-700">Número de pàgines:</label>
 
     <div class="ml-1.5 flex items-center gap-2">
-      <button
-        type="button"
-        (click)="decrement('pages')"
-        class="w-4 h-4 flex items-center justify-center border-2 hover:text-red-600 transition-all font-bold"
-      >
-        -
-      </button>
+      <button type="button" (click)="decrement('pages')" class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer"></button>
 
       <input
         type="text"
         formControlName="pages"
         readonly
-        class="w-8 text-center border-none focus:ring-0 font-bold text-gray-800 bg-transparent"
+        class="w-15 text-center border-2 rounded-xl border-gray-300  focus:ring-0 font-bold text-gray-800 bg-transparent"
       />
 
-      <button
-        type="button"
-        (click)="increment('pages')"
-        class="w-4 h-4 flex items-center justify-center border-2 hover:text-green-500 transition-all font-bold"
-      >
-        +
-      </button>
+      <button type="button" (click)="increment('pages')" class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer"></button>
     </div>
   </div>
 
   <div class="flex items-center justify-between">
     <label class="font-semibold text-gray-700">Número de llenguatges:</label>
 
-    <div class="flex items-center gap-2">
-      <button
-        type="button"
-        (click)="decrement('languages')"
-        class="w-4 h-4 flex items-center justify-center border-2 hover:text-red-600 transition-all font-bold"
-      >
-        -
-      </button>
+    <div class="ml-1.5 flex items-center gap-2">
+      <button type="button" (click)="decrement('languages')" class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer"></button>
 
       <input
         type="text"
         formControlName="languages"
         readonly
-        class="w-8 text-center border-none focus:ring-0 font-bold text-gray-800 bg-transparent"
+        class="w-15 text-center border-2 rounded-xl border-gray-300 focus:ring-0 font-bold text-gray-800 bg-transparent"
       />
 
-      <button
-        type="button"
-        (click)="increment('languages')"
-        class="w-4 h-4 flex items-center justify-center border-2 hover:text-green-500 transition-all font-bold"
-      >
-        +
-      </button>
+      <button type="button" (click)="increment('languages')" class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer"></button>
     </div>
   </div>
 </form>

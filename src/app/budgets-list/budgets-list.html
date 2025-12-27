@@ -1,7 +1,11 @@
 <div class="max-w-2xl w-full mx-auto">
   <form [formGroup]="budgetForm" class="space-y-4">
     @for (budget of budgets(); track budget.id) {
-    <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-6">
+    <div
+      class="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-6 transition-all"
+      [class.border-4]="budgetForm.get(budget.control)?.value"
+      [class.border-green-500]="budgetForm.get(budget.control)?.value"
+    >
       <div class="flex items-center justify-between">
         <div class="flex-1">
           <h3 class="text-gray-900 font-bold text-xl mb-1">{{ budget.name }}</h3>
