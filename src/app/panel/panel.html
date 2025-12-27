@@ -1,29 +1,47 @@
 <form
   [formGroup]="panelForm"
-  class="p-6 mt-4 border-2 border-gray-100 rounded-3xl bg-white shadow-sm max-w-sm"
+  class="p-6 mt-4 w-100 border-2 border-gray-100 rounded-3xl bg-white shadow-sm max-w-sm"
 >
   <div class="flex items-center justify-between mb-6">
-    <label class="font-semibold text-gray-700">Número de pàgines:</label>
+    <i
+      class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"
+    ></i
+    ><label class="font-semibold text-gray-700 w-48">Número de pàgines:</label>
 
-    <div class="ml-1.5 flex items-center gap-2">
-      <button type="button" (click)="decrement('pages')" class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer"></button>
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        (click)="decrement('pages')"
+        class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer"
+      ></button>
 
       <input
         type="text"
         formControlName="pages"
         readonly
-        class="w-15 text-center border-2 rounded-xl border-gray-300  focus:ring-0 font-bold text-gray-800 bg-transparent"
+        class="w-15 text-center border-2 rounded-xl border-gray-300 focus:ring-0 font-bold text-gray-800 bg-transparent"
       />
 
-      <button type="button" (click)="increment('pages')" class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer"></button>
+      <button
+        type="button"
+        (click)="increment('pages')"
+        class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer"
+      ></button>
     </div>
   </div>
 
   <div class="flex items-center justify-between">
-    <label class="font-semibold text-gray-700">Número de llenguatges:</label>
+    <i
+      class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"
+    ></i
+    ><label class="font-semibold text-gray-700 w-47">Número de llenguatges:</label>
 
     <div class="ml-1.5 flex items-center gap-2">
-      <button type="button" (click)="decrement('languages')" class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer"></button>
+      <button
+        type="button"
+        (click)="decrement('languages')"
+        class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer"
+      ></button>
 
       <input
         type="text"
@@ -32,7 +50,11 @@
         class="w-15 text-center border-2 rounded-xl border-gray-300 focus:ring-0 font-bold text-gray-800 bg-transparent"
       />
 
-      <button type="button" (click)="increment('languages')" class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer"></button>
+      <button
+        type="button"
+        (click)="increment('languages')"
+        class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer"
+      ></button>
     </div>
   </div>
 </form>
