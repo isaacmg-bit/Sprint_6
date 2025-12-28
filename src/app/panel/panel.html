@@ -3,9 +3,11 @@
   class="p-6 mt-4 w-100 border-2 border-gray-100 rounded-3xl bg-white shadow-sm max-w-sm"
 >
   <div class="flex items-center justify-between mb-6">
-    <i
+    <button
+      type="button"
+      (click)="openModal('pages')"
       class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"
-    ></i
+    ></button
     ><label class="font-semibold text-gray-700 w-48">Número de pàgines:</label>
 
     <div class="flex items-center gap-2">
@@ -31,9 +33,11 @@
   </div>
 
   <div class="flex items-center justify-between">
-    <i
+    <button
+      type="button"
+      (click)="openModal('languages')"
       class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"
-    ></i
+    ></button
     ><label class="font-semibold text-gray-700 w-47">Número de llenguatges:</label>
 
     <div class="ml-1.5 flex items-center gap-2">
@@ -58,3 +62,24 @@
     </div>
   </div>
 </form>
+
+@if (modalType) {
+<div class="fixed inset-0 z-50 flex items-center justify-center">
+  <div (click)="closeModal()" class="absolute inset-0 bg-gray-900/50"></div>
+
+  <div class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 z-10">
+    <h3 class="text-2xl text-center font-bold text-gray-900 mb-4">
+      {{ modalType === 'pages' ? 'Número de pàgines' : 'Número de llenguatges' }}
+    </h3>
+
+    <p class="text-gray-600 text-center leading-relaxed mb-2">
+      {{ modalType === 'pages' 
+         ? 'Afegeix el nombre de pàgines que tindrà el teu projecte.' 
+         : 'Afegeix el nombre de llenguatges que tindrà el teu projecte.' }}
+    </p>
+    <p class="text-gray-600 text-center leading-relaxed">
+      El cost de cada {{ modalType === 'pages' ? 'pàgina' : 'llenguatge' }} és de 30€.
+    </p>
+  </div>
+</div>
+}

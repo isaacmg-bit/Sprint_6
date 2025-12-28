@@ -9,18 +9,18 @@ import { Budget } from '../services/budget';
   styleUrl: './panel.css',
 })
 export class Panel {
-  private readonly MIN_PAG = 1;
-  private readonly MIN_LANG = 1;
+  modalType: 'pages' | 'languages' | null = null;
+  private readonly MIN_VAL = 1;
 
   panelForm = new FormGroup({
-    pages: new FormControl(this.MIN_PAG),
-    languages: new FormControl(this.MIN_LANG),
+    pages: new FormControl(this.MIN_VAL),
+    languages: new FormControl(this.MIN_VAL),
   });
 
   constructor(private budgetService: Budget) {
     this.panelForm.valueChanges.subscribe((values) => {
-      const pages = values.pages ?? this.MIN_PAG;
-      const languages = values.languages ?? this.MIN_LANG;
+      const pages = values.pages ?? this.MIN_VAL;
+      const languages = values.languages ?? this.MIN_VAL;
 
       const price = this.budgetService.calculateWebExtra(pages, languages);
 
@@ -37,12 +37,17 @@ export class Panel {
   }
   decrement(controlName: string) {
     const control = this.panelForm.get(controlName);
-    const minVal = controlName === 'pages' ? this.MIN_PAG : this.MIN_LANG;
 
-    if (control?.value > minVal) {
-      control?.setValue(control.value - 1);
-    } else {
-      console.warn(`El mínim és ${minVal}`);
+    if (control && control.value > this.MIN_VAL) {
+      control.setValue(control.value - 1);
     }
+  }
+
+  openModal(type: 'pages' | 'languages') {
+    this.modalType = type;
+  }
+
+  closeModal() {
+    this.modalType = null;
   }
 }
