@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Budget } from '../services/budget';
 import { Budgets } from '../models/budgets';
 import { Panel } from '../panel/panel';
+import { BudgetFormValues } from '../models/budgetformvalues';
 
 @Component({
   selector: 'app-budgets-list',
@@ -34,7 +35,11 @@ export class BudgetsList {
       description: "Programació d'una web responsive completa",
     },
   ]);
-  budgetForm: FormGroup;
+  budgetForm: FormGroup<{
+    seo: FormControl<boolean>;
+    ads: FormControl<boolean>;
+    web: FormControl<boolean>;
+  }>;
   selectedBudgets = signal<Budgets[]>([]);
 
   total = computed(() => {
@@ -46,13 +51,15 @@ export class BudgetsList {
 
   constructor(private budgetService: Budget) {
     this.budgetForm = new FormGroup({
-      seo: new FormControl(false),
-      ads: new FormControl(false),
-      web: new FormControl(false),
+      seo: new FormControl<boolean>(false, { nonNullable: true }),
+      ads: new FormControl<boolean>(false, { nonNullable: true }),
+      web: new FormControl<boolean>(false, { nonNullable: true }),
     });
 
     this.budgetForm.valueChanges.subscribe((values) => {
-      const selected = this.budgets().filter((service) => values[service.control]);
+      const selected = this.budgets().filter(
+        (service) => values[service.control as keyof BudgetFormValues]
+      );
 
       if (!values.web) {
         this.budgetService.resetWebExtra();

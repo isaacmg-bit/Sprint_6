@@ -17,7 +17,14 @@ describe('BudgetsList', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
+  it('should create the BudgetsList component', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should initialize the budgets signal with the budgets list in it', () => {
+        expect(component.budgets().length).toBe(3);
+        expect(component.budgets()[0].id).toBe('seo-budget');
+        expect(component.budgets()[1].id).toBe('ads-budget');
+        expect(component.budgets()[2].id).toBe('web-budget');
   });
 });
