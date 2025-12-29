@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Budget } from '../services/budget';
+import { PanelFormValues } from '../models/panelformvalues';
 
 @Component({
   selector: 'app-panel',
@@ -12,9 +13,12 @@ export class Panel {
   modalType: 'pages' | 'languages' | null = null;
   private readonly MIN_VAL = 1;
 
-  panelForm = new FormGroup({
-    pages: new FormControl(this.MIN_VAL),
-    languages: new FormControl(this.MIN_VAL),
+  panelForm = new FormGroup<{
+    pages: FormControl<number>;
+    languages: FormControl<number>;
+  }>({
+    pages: new FormControl<number>(this.MIN_VAL, { nonNullable: true }),
+    languages: new FormControl<number>(this.MIN_VAL, { nonNullable: true }),
   });
 
   constructor(private budgetService: Budget) {
@@ -28,14 +32,14 @@ export class Panel {
     });
   }
 
-  increment(controlName: string) {
+  increment(controlName: keyof PanelFormValues) {
     const control = this.panelForm.get(controlName);
 
     if (control) {
       control.setValue(control.value + 1);
     }
   }
-  decrement(controlName: string) {
+  decrement(controlName: keyof PanelFormValues) {
     const control = this.panelForm.get(controlName);
 
     if (control && control.value > this.MIN_VAL) {
