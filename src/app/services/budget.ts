@@ -1,10 +1,12 @@
 import { Injectable, signal } from '@angular/core';
+import { Budgets } from '../models/budgets';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Budget {
   webExtra = signal<number>(0);
+  budgetDB = signal<Budgets[]>([])
 
   private readonly PRICE_PER_UNIT = 30;
 

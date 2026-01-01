@@ -1,0 +1,30 @@
+<div class="bg-white rounded-2xl shadow-md p-6 max-w-2xl w-full mx-auto my-6">
+  <h2 class="text-xl font-bold mb-4">Demanar pressupost</h2>
+
+  <div class="flex flex-col sm:flex-row gap-3 w-full">
+    <input
+      type="text"
+      placeholder="Nom"
+      [(ngModel)]="name"
+      class="w-full flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+    />
+    <input
+      type="number"
+      placeholder="Telèfon"
+      [(ngModel)]="phone"
+      class="w-full flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+    />
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+      class="w-full flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+    />
+
+    <button
+      class="w-full sm:w-auto sm:flex-none bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded font-medium transition-colors whitespace-nowrap"
+    >
+      Sol·licitar pressupost
+    </button>
+  </div>
+</div>
