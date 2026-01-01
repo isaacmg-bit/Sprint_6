@@ -1,9 +1,8 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Budget } from '../services/budget';
+import { BudgetService } from '../services/budget';
 import { Budgets } from '../models/budgets';
 import { Panel } from '../panel/panel';
-import { BudgetFormValues } from '../models/budgetformvalues';
 
 @Component({
   selector: 'app-budgets-list',
@@ -12,6 +11,14 @@ import { BudgetFormValues } from '../models/budgetformvalues';
   styleUrl: './budgets-list.css',
 })
 export class BudgetsList {
+  budgetService = inject(BudgetService);
+
+  readonly budgetForm = new FormGroup({
+    seo: new FormControl(false, { nonNullable: true }),
+    ads: new FormControl(false, { nonNullable: true }),
+    web: new FormControl(false, { nonNullable: true }),
+  });
+
   budgets = signal<Budgets[]>([
     {
       id: 'seo-budget',
@@ -35,38 +42,17 @@ export class BudgetsList {
       description: "Programació d'una web responsive completa",
     },
   ]);
-  budgetForm: FormGroup<{
-    seo: FormControl<boolean>;
-    ads: FormControl<boolean>;
-    web: FormControl<boolean>;
-  }>;
+
   selectedBudgets = signal<Budgets[]>([]);
 
-  total = computed(() => {
-    const basePrice = this.selectedBudgets().reduce((sum, budget) => sum + budget.price, 0);
-    const extraWebPrice = this.budgetService.webExtra();
-
-    return basePrice + extraWebPrice;
-  });
-
-  constructor(private budgetService: Budget) {
-    this.budgetForm = new FormGroup({
-      seo: new FormControl<boolean>(false, { nonNullable: true }),
-      ads: new FormControl<boolean>(false, { nonNullable: true }),
-      web: new FormControl<boolean>(false, { nonNullable: true }),
-    });
-
+  constructor() {
     this.budgetForm.valueChanges.subscribe((values) => {
-      const selected = this.budgets().filter(
-        (service) => values[service.control as keyof BudgetFormValues]
-      );
-
+      const selected = this.budgets().filter((service) => values[service.control]);
       if (!values.web) {
         this.budgetService.resetWebExtra();
       }
-
       this.selectedBudgets.set(selected);
-      console.log('Clicked:', this.selectedBudgets(), 'Total:', this.total());
+      this.budgetService.selectedServices.set(selected);
     });
   }
 }
