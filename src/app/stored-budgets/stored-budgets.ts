@@ -27,6 +27,8 @@ export class StoredBudgets {
       date: new Date(),
       services: [...this.budgetService.selectedServices()],
       totalPrice: this.budgetService.totalPrice(),
+      pages: this.budgetService.currentPages(),
+      languages: this.budgetService.currentLanguages(),
     };
 
     this.budgetService.addBudget(newBudget);

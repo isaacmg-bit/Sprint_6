@@ -7,4 +7,6 @@ export interface BudgetPersonalData {
   date: Date;
   services: Budgets[];
   totalPrice: number;
+  pages: number;
+  languages: number;
 }
