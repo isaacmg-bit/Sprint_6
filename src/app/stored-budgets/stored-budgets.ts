@@ -2,7 +2,6 @@ import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { BudgetPersonalData } from '../models/budgetpersondata';
-import { Budgets } from '../models/budgets';
 
 @Component({
   selector: 'app-stored-budgets',
