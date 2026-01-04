@@ -2,6 +2,7 @@ import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { BudgetPersonalData } from '../models/budgetpersondata';
+import { Budgets } from '../models/budgets';
 
 @Component({
   selector: 'app-stored-budgets',
@@ -21,6 +22,7 @@ export class StoredBudgets {
     if (!this.name() || !this.email()) return;
 
     const newBudget: BudgetPersonalData = {
+      id: crypto.randomUUID(),
       name: this.name(),
       phone: Number(this.phone()),
       email: this.email(),

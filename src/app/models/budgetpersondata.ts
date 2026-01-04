@@ -1,6 +1,7 @@
 import { Budgets } from './budgets';
 
 export interface BudgetPersonalData {
+  id: string;
   name: string;
   phone: number;
   email: string;
