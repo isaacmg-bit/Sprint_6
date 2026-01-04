@@ -1,6 +1,5 @@
 <div class="bg-white rounded-2xl shadow-md p-6 max-w-2xl w-full mx-auto my-6">
   <h2 class="text-xl font-bold mb-4">Demanar pressupost</h2>
-
   <div class="flex flex-col sm:flex-row gap-3 w-full">
     <input
       type="text"
@@ -29,46 +28,58 @@
     </button>
   </div>
 </div>
+
 <hr class="border-t-4 border-dashed border-gray-300 mt-12 mb-10 w-175 mx-auto" />
 
-<h1 class="text-2xl font-bold mx-39">Pressupostos en curs:</h1>
-<div class="space-y-4 max-w-5xl mx-auto p-4">
-  @for (budget of budgetService.budgetDB(); track budget.id) {
-  <div class="bg-white rounded-2xl shadow-md p-6 max-w-2xl w-full mx-auto my-6 flex items-center">
-    <div class="w-1/4">
-      <h2 class="text-xl font-bold text-gray-900 leading-tight">{{ budget.name }}</h2>
-      <div class="text-gray-400 text-sm mt-1">
-        <p>{{ budget.email }}</p>
-        <p>{{ budget.phone }}</p>
-      </div>
-    </div>
+<div class="space-y-4 max-w-2xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Pressupostos en curs:</h1>
 
-    <div class="flex-1 px-8">
-      <p class="font-bold text-sm mb-1 text-gray-900">Serveis contractats:</p>
-      <ul class="text-sm text-gray-600">
-        @for (service of budget.services; track service.id) {
-        <li class="flex items-start">
-          <span class="mr-2">•</span>
-          <span>
-            {{ service.name }}
-            @if (service.control === 'web' && budget.pages > 0) {
-            <span class="text-gray-400 text-xs italic">
-              ({{ budget.pages }} pàgines, {{ budget.languages }} llenguatges)
-            </span>
-            }
-          </span>
-        </li>
-        }
-      </ul>
-    </div>
-
-    <div class="w-1/4 text-right">
-      <p class="text-gray-400 text-sm font-medium">Total:</p>
-      <div class="flex items-baseline justify-end gap-1">
-        <span class="text-4xl font-black text-gray-900">{{ budget.totalPrice }}</span>
-        <span class="text-2xl font-bold text-gray-900">€</span>
-      </div>
+    <div class="flex items-center gap-4 text-sm">
+      <button (click)="sortCriteria.set('date')" class="hover:opacity-70 font-medium text-gray-700">Data</button>
+      <button (click)="sortCriteria.set('name')" class="hover:opacity-70 font-medium text-gray-700">Import</button>
+      <button (click)="sortCriteria.set('price')" class="hover:opacity-70 font-medium text-gray-700">Nom</button>
     </div>
   </div>
-  }
+
+  <div class="space-y-4 max-w-5xl mx-auto p-4">
+    @for (budget of sortBudgets; track budget.id) {
+    <div class="bg-white rounded-2xl shadow-md p-6 max-w-2xl w-full mx-auto my-6 flex items-center">
+      <div class="w-1/4">
+        <h2 class="text-xl font-bold text-gray-900 leading-tight">{{ budget.name }}</h2>
+        <div class="text-gray-400 text-sm mt-1">
+          <p>{{ budget.email }}</p>
+          <p>{{ budget.phone }}</p>
+        </div>
+      </div>
+
+      <div class="flex-1 px-8">
+        <p class="font-bold text-sm mb-1 text-gray-900">Serveis contractats:</p>
+        <ul class="text-sm text-gray-600">
+          @for (service of budget.services; track service.id) {
+          <li class="flex items-start">
+            <span class="mr-2">•</span>
+            <span>
+              {{ service.name }}
+              @if (service.control === 'web' && budget.pages > 0) {
+              <span class="text-gray-400 text-xs italic">
+                ({{ budget.pages }} pàgines, {{ budget.languages }} llenguatges)
+              </span>
+              }
+            </span>
+          </li>
+          }
+        </ul>
+      </div>
+
+      <div class="w-1/4 text-right">
+        <p class="text-gray-400 text-sm font-medium">Total:</p>
+        <div class="flex items-baseline justify-end gap-1">
+          <span class="text-4xl font-black text-gray-900">{{ budget.totalPrice }}</span>
+          <span class="text-2xl font-bold text-gray-900">€</span>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
 </div>

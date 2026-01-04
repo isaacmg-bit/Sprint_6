@@ -14,7 +14,7 @@ export class StoredBudgets {
   name = signal<string>('');
   phone = signal<string>('');
   email = signal<string>('');
-
+  sortCriteria = signal<'name' | 'price' | 'date'>('name');
   public budgetService = inject(BudgetService);
 
   submitBudget(): void {
@@ -37,6 +37,21 @@ export class StoredBudgets {
     this.resetForm();
 
     console.log('Saved budgets:', this.budgetService.budgetDB());
+  }
+
+  get sortBudgets() {
+    const criteria = this.sortCriteria();
+    const budgets = [...this.budgetService.budgetDB()];
+
+    if (criteria === 'name') {
+      return budgets.sort((a, b) => b.name.localeCompare(a.name));
+    } else if (criteria === 'price') {
+      return budgets.sort((a, b) => a.totalPrice - b.totalPrice);
+    } else if (criteria === 'date') {
+      return budgets.sort((a, b) => b.date.getTime() - a.date.getTime());
+    }
+
+    return budgets;
   }
 
   private resetForm(): void {
