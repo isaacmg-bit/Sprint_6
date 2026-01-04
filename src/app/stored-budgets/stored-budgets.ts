@@ -2,6 +2,7 @@ import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { BudgetPersonalData } from '../models/budgetpersondata';
+type SortCriteria = 'name' | 'price' | 'date';
 
 @Component({
   selector: 'app-stored-budgets',
@@ -14,7 +15,7 @@ export class StoredBudgets {
   name = signal<string>('');
   phone = signal<string>('');
   email = signal<string>('');
-  sortCriteria = signal<'name' | 'price' | 'date'>('name');
+  sortCriteria = signal<SortCriteria>('name');
   public budgetService = inject(BudgetService);
 
   submitBudget(): void {
@@ -39,7 +40,7 @@ export class StoredBudgets {
     console.log('Saved budgets:', this.budgetService.budgetDB());
   }
 
-  get sortBudgets() {
+  get sortBudgets(): BudgetPersonalData[] {
     const criteria = this.sortCriteria();
     const budgets = [...this.budgetService.budgetDB()];
 
