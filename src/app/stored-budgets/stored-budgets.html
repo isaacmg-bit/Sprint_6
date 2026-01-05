@@ -36,6 +36,13 @@
     <h1 class="text-2xl font-bold">Pressupostos en curs:</h1>
 
     <div class="flex items-center gap-4 text-sm">
+      <input
+        #searchInput
+        type="text"
+        placeholder="Buscar por nom"
+        (input)="searchTerm.set(searchInput.value)"
+        class="h-10 w-56 px-3 text-sm text-slate-700 bg-white border border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 transition"
+      />
       <button (click)="setSortCriteria('date')" class="hover:opacity-70 font-medium text-gray-700">
         Data {{ sortCriteria() === 'date' ? (sortOrder() === 'ascending' ? '↑' : '↓') : '' }}
       </button>

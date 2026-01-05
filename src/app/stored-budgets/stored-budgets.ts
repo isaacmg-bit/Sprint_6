@@ -18,6 +18,7 @@ export class StoredBudgets {
   email = signal<string>('');
   sortCriteria = signal<SortCriteria>('name');
   sortOrder = signal<SortOrder>('ascending');
+  searchTerm = signal<string>('');
 
   public budgetService = inject(BudgetService);
 
@@ -53,7 +54,12 @@ export class StoredBudgets {
   sortedBudgets = computed(() => {
     const criteria = this.sortCriteria();
     const order = this.sortOrder();
-    const budgets = [...this.budgetService.budgetDB()];
+    let budgets = [...this.budgetService.budgetDB()];
+    const search = this.searchTerm().toLowerCase();
+
+    if (search) {
+      budgets = budgets.filter((budget) => budget.name.toLowerCase().includes(search));
+    }
 
     if (criteria === 'name') {
       budgets.sort((a, b) => a.name.localeCompare(b.name));
