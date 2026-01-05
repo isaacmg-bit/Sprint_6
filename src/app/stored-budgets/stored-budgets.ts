@@ -1,8 +1,9 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { BudgetPersonalData } from '../models/budgetpersondata';
 type SortCriteria = 'name' | 'price' | 'date';
+type SortOrder = 'ascending' | 'descending';
 
 @Component({
   selector: 'app-stored-budgets',
@@ -16,6 +17,8 @@ export class StoredBudgets {
   phone = signal<string>('');
   email = signal<string>('');
   sortCriteria = signal<SortCriteria>('name');
+  sortOrder = signal<SortOrder>('ascending');
+
   public budgetService = inject(BudgetService);
 
   submitBudget(): void {
@@ -36,24 +39,32 @@ export class StoredBudgets {
     this.budgetService.addBudget(newBudget);
 
     this.resetForm();
-
-    console.log('Saved budgets:', this.budgetService.budgetDB());
   }
 
-  get sortBudgets(): BudgetPersonalData[] {
+  setSortCriteria(criteria: SortCriteria): void {
+    if (this.sortCriteria() === criteria) {
+      this.sortOrder.update((order) => (order === 'ascending' ? 'descending' : 'ascending'));
+    } else {
+      this.sortCriteria.set(criteria);
+      this.sortOrder.set('ascending');
+    }
+  }
+
+  sortedBudgets = computed(() => {
     const criteria = this.sortCriteria();
+    const order = this.sortOrder();
     const budgets = [...this.budgetService.budgetDB()];
 
     if (criteria === 'name') {
-      return budgets.sort((a, b) => b.name.localeCompare(a.name));
+      budgets.sort((a, b) => a.name.localeCompare(b.name));
     } else if (criteria === 'price') {
-      return budgets.sort((a, b) => a.totalPrice - b.totalPrice);
+      budgets.sort((a, b) => a.totalPrice - b.totalPrice);
     } else if (criteria === 'date') {
-      return budgets.sort((a, b) => b.date.getTime() - a.date.getTime());
+      budgets.sort((a, b) => a.date.getTime() - b.date.getTime());
     }
 
-    return budgets;
-  }
+    return order === 'descending' ? budgets.reverse() : budgets;
+  });
 
   private resetForm(): void {
     this.name.set('');
