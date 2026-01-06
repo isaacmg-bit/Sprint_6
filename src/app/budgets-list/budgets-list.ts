@@ -14,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class BudgetsList {
   budgetService = inject(BudgetService);
   router = inject(Router);
-  private route = inject(ActivatedRoute);
+  route = inject(ActivatedRoute);
 
   private startingParams = this.route.snapshot.queryParams;
 
@@ -51,6 +51,12 @@ export class BudgetsList {
   selectedBudgets = signal<Budgets[]>([]);
 
   constructor() {
+    const pages = this.startingParams['pages'];
+    const languages = this.startingParams['languages'];
+
+    if (pages) this.budgetService.currentPages.set(Number(pages));
+    if (languages) this.budgetService.currentLanguages.set(Number(languages));
+
     this.budgetForm.valueChanges.subscribe((values) => {
       const selected = this.budgets().filter((service) => values[service.control]);
       if (!values.web) {
@@ -67,12 +73,20 @@ export class BudgetsList {
       this.updateURL();
     });
   }
+
   updateURL(): void {
     const formValues = this.budgetForm.value;
     const currentPages = this.budgetService.currentPages();
     const currentLanguages = this.budgetService.currentLanguages();
     const queryParams: any = {};
-    if (!formValues.seo && !formValues.ads && !formValues.web) return;
+
+    if (!formValues.seo && !formValues.ads && !formValues.web) {
+      this.router.navigate([], {
+        queryParams: {},
+        replaceUrl: true,
+      });
+      return;
+    }
 
     if (formValues.seo) {
       queryParams['seo'] = true;
@@ -88,9 +102,9 @@ export class BudgetsList {
         queryParams['languages'] = currentLanguages;
       }
     }
-
     this.router.navigate([], {
       queryParams,
+      replaceUrl: true,
     });
   }
 }

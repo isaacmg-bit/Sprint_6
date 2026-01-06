@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { PanelFormValues } from '../models/panelformvalues';
@@ -28,6 +28,15 @@ export class Panel {
 
       const price = this.budgetService.calculateWebExtra(pages, languages);
       this.budgetService.webExtra.set(price);
+    });
+    effect(() => {
+      this.panelForm.patchValue(
+        {
+          pages: this.budgetService.currentPages(),
+          languages: this.budgetService.currentLanguages(),
+        },
+        { emitEvent: false }
+      );
     });
   }
 
