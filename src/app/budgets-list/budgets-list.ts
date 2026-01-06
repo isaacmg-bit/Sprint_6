@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { Budgets } from '../models/budgets';
 import { Panel } from '../panel/panel';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-budgets-list',
@@ -12,6 +13,35 @@ import { Panel } from '../panel/panel';
 })
 export class BudgetsList {
   budgetService = inject(BudgetService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+  updateURL(): void {
+    const formValues = this.budgetForm.value;
+    const currentPages = this.budgetService.currentPages();
+    const currentLanguages = this.budgetService.currentLanguages();
+
+    const queryParams: any = {};
+
+    if (formValues.seo) {
+      queryParams['seo'] = true;
+    }
+    if (formValues.ads) {
+      queryParams['ads'] = true;
+    }
+    if (formValues.web) {
+      queryParams['web'] = true;
+
+      if (currentPages > 1 || currentLanguages > 1) {
+        queryParams['pages'] = currentPages;
+        queryParams['languages'] = currentLanguages;
+      }
+    }
+    this.router.navigate([], {
+      queryParams,
+      queryParamsHandling: 'merge',
+    });
+  }
 
   readonly budgetForm = new FormGroup({
     seo: new FormControl(false, { nonNullable: true }),
@@ -53,6 +83,7 @@ export class BudgetsList {
       }
       this.selectedBudgets.set(selected);
       this.budgetService.selectedServices.set(selected);
+      this.updateURL();
     });
   }
 }
