@@ -13,45 +13,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BudgetsList {
   budgetService = inject(BudgetService);
-  route = inject(ActivatedRoute);
   router = inject(Router);
+  private route = inject(ActivatedRoute);
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      console.log(params);
-    });
-  }
-
-  updateURL(): void {
-    const formValues = this.budgetForm.value;
-    const currentPages = this.budgetService.currentPages();
-    const currentLanguages = this.budgetService.currentLanguages();
-
-    const queryParams: any = {};
-
-    if (formValues.seo) {
-      queryParams['seo'] = true;
-    }
-    if (formValues.ads) {
-      queryParams['ads'] = true;
-    }
-    if (formValues.web) {
-      queryParams['web'] = true;
-
-      if (currentPages > 1 || currentLanguages > 1) {
-        queryParams['pages'] = currentPages;
-        queryParams['languages'] = currentLanguages;
-      }
-    }
-    this.router.navigate([], {
-      queryParams,
-    });
-  }
+  private startingParams = this.route.snapshot.queryParams;
 
   readonly budgetForm = new FormGroup({
-    seo: new FormControl(false, { nonNullable: true }),
-    ads: new FormControl(false, { nonNullable: true }),
-    web: new FormControl(false, { nonNullable: true }),
+    seo: new FormControl(this.startingParams['seo'] === 'true', { nonNullable: true }),
+    ads: new FormControl(this.startingParams['ads'] === 'true', { nonNullable: true }),
+    web: new FormControl(this.startingParams['web'] === 'true', { nonNullable: true }),
   });
 
   budgets = signal<Budgets[]>([
@@ -90,11 +60,37 @@ export class BudgetsList {
       this.budgetService.selectedServices.set(selected);
       this.updateURL();
     });
+
     effect(() => {
       this.budgetService.currentPages();
       this.budgetService.currentLanguages();
-
       this.updateURL();
+    });
+  }
+  updateURL(): void {
+    const formValues = this.budgetForm.value;
+    const currentPages = this.budgetService.currentPages();
+    const currentLanguages = this.budgetService.currentLanguages();
+    const queryParams: any = {};
+    if (!formValues.seo && !formValues.ads && !formValues.web) return;
+
+    if (formValues.seo) {
+      queryParams['seo'] = true;
+    }
+    if (formValues.ads) {
+      queryParams['ads'] = true;
+    }
+    if (formValues.web) {
+      queryParams['web'] = true;
+
+      if (currentPages > 1 || currentLanguages > 1) {
+        queryParams['pages'] = currentPages;
+        queryParams['languages'] = currentLanguages;
+      }
+    }
+
+    this.router.navigate([], {
+      queryParams,
     });
   }
 }
