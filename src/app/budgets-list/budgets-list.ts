@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, effect } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { Budgets } from '../models/budgets';
@@ -15,6 +15,12 @@ export class BudgetsList {
   budgetService = inject(BudgetService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      console.log(params);
+    });
+  }
 
   updateURL(): void {
     const formValues = this.budgetForm.value;
@@ -39,7 +45,6 @@ export class BudgetsList {
     }
     this.router.navigate([], {
       queryParams,
-      queryParamsHandling: 'merge',
     });
   }
 
@@ -83,6 +88,12 @@ export class BudgetsList {
       }
       this.selectedBudgets.set(selected);
       this.budgetService.selectedServices.set(selected);
+      this.updateURL();
+    });
+    effect(() => {
+      this.budgetService.currentPages();
+      this.budgetService.currentLanguages();
+
       this.updateURL();
     });
   }
