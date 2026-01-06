@@ -51,6 +51,13 @@ export class BudgetsList {
   selectedBudgets = signal<Budgets[]>([]);
 
   constructor() {
+    const initialSelected = this.budgets().filter(
+      (budget) => this.startingParams[budget.control] === 'true'
+    );
+
+    this.budgetService.selectedServices.set(initialSelected);
+    this.selectedBudgets.set(initialSelected);
+
     const pages = this.startingParams['pages'];
     const languages = this.startingParams['languages'];
 
