@@ -29,6 +29,7 @@ export class Panel {
       const price = this.budgetService.calculateWebExtra(pages, languages);
       this.budgetService.webExtra.set(price);
     });
+
     effect(() => {
       this.panelForm.patchValue(
         {

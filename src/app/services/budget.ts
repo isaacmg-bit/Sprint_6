@@ -12,6 +12,7 @@ export class BudgetService {
   currentPages = signal<number>(1);
   currentLanguages = signal<number>(1);
   private readonly PRICE_PER_UNIT = 30;
+
   readonly totalPrice = computed(() => {
     const servicesPrice = this.selectedServices().reduce(
       (sum: number, service: Budgets) => sum + service.price,

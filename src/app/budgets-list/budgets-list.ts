@@ -64,6 +64,14 @@ export class BudgetsList {
     if (pages) this.budgetService.currentPages.set(Number(pages));
     if (languages) this.budgetService.currentLanguages.set(Number(languages));
 
+    if (this.startingParams['web'] === 'true') {
+      const extraPrice = this.budgetService.calculateWebExtra(
+        this.budgetService.currentPages(),
+        this.budgetService.currentLanguages()
+      );
+      this.budgetService.webExtra.set(extraPrice);
+    }
+
     this.budgetForm.valueChanges.subscribe((values) => {
       const selected = this.budgets().filter((service) => values[service.control]);
       if (!values.web) {

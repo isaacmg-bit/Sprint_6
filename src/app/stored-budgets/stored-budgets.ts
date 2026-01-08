@@ -2,6 +2,7 @@ import { Component, signal, inject, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { BudgetPersonalData } from '../models/budgetpersondata';
+
 type SortCriteria = 'name' | 'price' | 'date';
 type SortOrder = 'ascending' | 'descending';
 
