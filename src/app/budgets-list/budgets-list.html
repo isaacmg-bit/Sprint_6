@@ -1,43 +1,73 @@
 <div class="max-w-2xl w-full mx-auto">
-  <form [formGroup]="budgetForm" class="space-y-4">
+  <form
+    [formGroup]="budgetForm"
+    class="space-y-4"
+    role="form"
+    aria-label="Formulari de pressupostos"
+  >
     @for (budget of budgets(); track budget.id) {
-    <div
+    <fieldset
       class="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-6 transition-all"
       [class.border-4]="budgetForm.get(budget.control)?.value"
       [class.border-green-500]="budgetForm.get(budget.control)?.value"
+      [attr.aria-labelledby]="'budget-title-' + budget.id"
     >
-      <div class="flex items-center justify-between">
-        <div class="flex-1">
-          <h3 class="text-gray-900 font-bold text-xl mb-1">{{ budget.name }}</h3>
-          <p class="text-gray-500 text-sm leading-tight">{{ budget.description }}</p>
-        </div>
-        <div class="flex items-center gap-12">
-          <span class="text-gray-900 font-bold text-4xl"
-            >{{ budget.price }}<span class="text-gray-400 text-2xl">€</span></span
+      <legend class="sr-only">{{ budget.name }}</legend>
+
+      <header class="flex items-center justify-between">
+        <section class="flex-1">
+          <h3 [id]="'budget-title-' + budget.id" class="text-gray-900 font-bold text-xl mb-1">
+            {{ budget.name }}
+          </h3>
+          <p [id]="'budget-desc-' + budget.id" class="text-gray-500 text-sm leading-tight">
+            {{ budget.description }}
+          </p>
+        </section>
+        <aside class="flex items-center gap-12">
+          <span
+            class="text-gray-900 font-bold text-4xl"
+            [attr.aria-label]="'Preu: ' + budget.price + ' euros'"
           >
-          <label class="flex items-center gap-2 cursor-pointer">
+            {{ budget.price }}<span class="text-gray-400 text-2xl" aria-hidden="true">€</span>
+          </span>
+          <label
+            [for]="budget.id"
+            class="flex items-center gap-2 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 rounded"
+          >
             <input
               type="checkbox"
               [id]="budget.id"
               [formControlName]="budget.control"
-              class="w-4 h-4"
+              class="w-4 h-4 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              [attr.aria-describedby]="'budget-desc-' + budget.id"
+              [attr.aria-checked]="budgetForm.get(budget.control)?.value"
             />
             <span class="text-gray-600 text-sm">Afegir</span>
           </label>
-        </div>
-      </div>
+        </aside>
+      </header>
 
       @if (budget.control === 'web' && budgetForm.get('web')?.value) {
-      <div class="flex justify-end w-full px-4"><app-panel></app-panel></div>
+      <section
+        class="flex justify-end w-full px-4"
+        aria-label="Opcions addicionals per a la pàgina web"
+      >
+        <app-panel></app-panel>
+      </section>
       }
-    </div>
+    </fieldset>
     }
   </form>
 
-  <div class="mt-12 text-right">
+  <footer class="mt-12 text-right" role="status" aria-live="polite" aria-atomic="true">
     <p class="text-gray-900 text-2xl font-semibold">
       Preu pressuposat:
-      <span class="text-4xl font-bold">{{ budgetService.totalPrice() }}<span class="text-gray-400">€</span></span>
+      <span
+        class="text-4xl font-bold"
+        [attr.aria-label]="'Total: ' + budgetService.totalPrice() + ' euros'"
+      >
+        {{ budgetService.totalPrice() }}<span class="text-gray-400" aria-hidden="true">€</span>
+      </span>
     </p>
-  </div>
+  </footer>
 </div>

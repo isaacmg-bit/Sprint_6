@@ -1,85 +1,149 @@
 <form
   [formGroup]="panelForm"
   class="p-6 mt-4 w-100 border-2 border-gray-100 rounded-3xl bg-white shadow-sm max-w-sm"
+  role="form"
+  aria-label="Configuració de pàgines i llenguatges"
 >
-  <div class="flex items-center justify-between mb-6">
+  <fieldset class="flex items-center justify-between mb-6">
+    <legend class="sr-only">Número de pàgines</legend>
+
     <button
       type="button"
       (click)="openModal('pages')"
-      class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"
-    ></button
-    ><label class="font-semibold text-gray-700 w-48">Número de pàgines:</label>
+      class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+      aria-label="Informació sobre el número de pàgines"
+      title="Informació sobre el número de pàgines"
+    ></button>
 
-    <div class="flex items-center gap-2">
+    <label for="pages-input" class="font-semibold text-gray-700 w-48"> Número de pàgines: </label>
+
+    <section class="flex items-center gap-2" role="group" aria-labelledby="pages-label">
+      <span id="pages-label" class="sr-only">Control de número de pàgines</span>
+
       <button
         type="button"
         (click)="decrement('pages')"
-        class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer"
+        class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
+        aria-label="Reduir número de pàgines"
+        [attr.aria-controls]="'pages-input'"
+        tabindex="0"
       ></button>
 
       <input
+        id="pages-input"
         type="text"
         formControlName="pages"
         readonly
-        class="w-15 text-center border-2 rounded-xl border-gray-300 focus:ring-0 font-bold text-gray-800 bg-transparent"
+        class="w-15 text-center border-2 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold text-gray-800 bg-transparent"
+        [attr.aria-label]="'Número de pàgines: ' + panelForm.get('pages')?.value"
+        aria-readonly="true"
       />
 
       <button
         type="button"
         (click)="increment('pages')"
-        class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer"
+        class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
+        aria-label="Augmentar número de pàgines"
+        [attr.aria-controls]="'pages-input'"
+        tabindex="0"
       ></button>
-    </div>
-  </div>
+    </section>
+  </fieldset>
 
-  <div class="flex items-center justify-between">
+  <fieldset class="flex items-center justify-between">
+    <legend class="sr-only">Número de llenguatges</legend>
+
     <button
       type="button"
       (click)="openModal('languages')"
-      class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"
-    ></button
-    ><label class="font-semibold text-gray-700 w-47">Número de llenguatges:</label>
+      class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+      aria-label="Informació sobre el número de llenguatges"
+      title="Informació sobre el número de llenguatges"
+    ></button>
 
-    <div class="ml-1.5 flex items-center gap-2">
+    <label for="languages-input" class="font-semibold text-gray-700 w-47">
+      Número de llenguatges:
+    </label>
+
+    <section class="ml-1.5 flex items-center gap-2" role="group" aria-labelledby="languages-label">
+      <span id="languages-label" class="sr-only">Control de número de llenguatges</span>
+
       <button
         type="button"
         (click)="decrement('languages')"
-        class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer"
+        class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
+        aria-label="Reduir número de llenguatges"
+        [attr.aria-controls]="'languages-input'"
+        tabindex="0"
       ></button>
 
       <input
+        id="languages-input"
         type="text"
         formControlName="languages"
         readonly
-        class="w-15 text-center border-2 rounded-xl border-gray-300 focus:ring-0 font-bold text-gray-800 bg-transparent"
+        class="w-15 text-center border-2 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold text-gray-800 bg-transparent"
+        [attr.aria-label]="'Número de llenguatges: ' + panelForm.get('languages')?.value"
+        aria-readonly="true"
       />
 
       <button
         type="button"
         (click)="increment('languages')"
-        class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer"
+        class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
+        aria-label="Augmentar número de llenguatges"
+        [attr.aria-controls]="'languages-input'"
+        tabindex="0"
       ></button>
-    </div>
-  </div>
+    </section>
+  </fieldset>
 </form>
 
 @if (modalType) {
-<div class="fixed inset-0 z-50 flex items-center justify-center">
-  <div (click)="closeModal()" class="absolute inset-0 bg-gray-900/50"></div>
+<aside
+  class="fixed inset-0 z-50 flex items-center justify-center"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="'modal-title'"
+  [attr.aria-describedby]="'modal-description'"
+>
+  <div
+    (click)="closeModal()"
+    (keydown.escape)="closeModal()"
+    class="absolute inset-0 bg-gray-900/50"
+    aria-hidden="true"
+  ></div>
 
-  <div class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 z-10">
-    <h3 class="text-2xl text-center font-bold text-gray-900 mb-4">
-      {{ modalType === 'pages' ? 'Número de pàgines' : 'Número de llenguatges' }}
-    </h3>
+  <article class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 z-10">
+    <header>
+      <h3 id="modal-title" class="text-2xl text-center font-bold text-gray-900 mb-4">
+        {{ modalType === 'pages' ? 'Número de pàgines' : 'Número de llenguatges' }}
+      </h3>
+    </header>
 
-    <p class="text-gray-600 text-center leading-relaxed mb-2">
-      {{ modalType === 'pages' 
-         ? 'Afegeix el nombre de pàgines que tindrà el teu projecte.' 
-         : 'Afegeix el nombre de llenguatges que tindrà el teu projecte.' }}
-    </p>
-    <p class="text-gray-600 text-center leading-relaxed">
-      El cost de cada {{ modalType === 'pages' ? 'pàgina' : 'llenguatge' }} és de 30€.
-    </p>
-  </div>
-</div>
+    <section id="modal-description">
+      <p class="text-gray-600 text-center leading-relaxed mb-2">
+        {{
+          modalType === 'pages'
+            ? 'Afegeix el nombre de pàgines que tindrà el teu projecte.'
+            : 'Afegeix el nombre de llenguatges que tindrà el teu projecte.'
+        }}
+      </p>
+      <p class="text-gray-600 text-center leading-relaxed">
+        El cost de cada {{ modalType === 'pages' ? 'pàgina' : 'llenguatge' }} és de 30€.
+      </p>
+    </section>
+
+    <footer class="mt-6 text-center">
+      <button
+        type="button"
+        (click)="closeModal()"
+        class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="Tancar diàleg"
+      >
+        Tancar
+      </button>
+    </footer>
+  </article>
+</aside>
 }

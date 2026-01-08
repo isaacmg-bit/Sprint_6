@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Budget } from '../services/budget';
+import { BudgetService } from '../services/budget';
 import { Panel } from './panel';
 
 describe('Panel', () => {
   let component: Panel;
   let fixture: ComponentFixture<Panel>;
-  let budgetService: Budget;
+  let BudgetServiceService: BudgetService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Panel],
-      providers: [Budget],
+      providers: [BudgetService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Panel);
     component = fixture.componentInstance;
-    budgetService = TestBed.inject(Budget);
+    BudgetServiceService = TestBed.inject(BudgetService);
     await fixture.whenStable();
   });
 
@@ -56,7 +56,7 @@ describe('Panel', () => {
   });
 
   it('should call calculateWebExtra when form changes', () => {
-    const spy = vi.spyOn(budgetService, 'calculateWebExtra');
+    const spy = vi.spyOn(BudgetServiceService, 'calculateWebExtra');
     component.panelForm.patchValue({ pages: 3, languages: 2 });
     expect(spy).toHaveBeenCalledWith(3, 2);
   });

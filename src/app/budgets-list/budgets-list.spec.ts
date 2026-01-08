@@ -1,18 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BudgetsList } from './budgets-list';
+import { BudgetService } from '../services/budget';
+import { provideRouter } from '@angular/router';
 
 describe('BudgetsList', () => {
   let component: BudgetsList;
   let fixture: ComponentFixture<BudgetsList>;
+  let budgetService: BudgetService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BudgetsList],
+      providers: [
+        BudgetService,
+        provideRouter([]), // Necesario porque el componente usa Router y ActivatedRoute
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BudgetsList);
     component = fixture.componentInstance;
+    budgetService = TestBed.inject(BudgetService);
     await fixture.whenStable();
   });
 
@@ -26,26 +33,34 @@ describe('BudgetsList', () => {
     expect(component.budgets()[1].id).toBe('ads-budget');
     expect(component.budgets()[2].id).toBe('web-budget');
   });
+
   it('should initialize with empty selectedBudgets', () => {
     expect(component.selectedBudgets().length).toBe(0);
   });
+
   it('should initialize total as 0', () => {
-    expect(component.total()).toBe(0);
+    expect(budgetService.totalPrice()).toBe(0);
   });
+
   it('should update selectedBudgets when a checkbox is selected', () => {
     component.budgetForm.patchValue({ seo: true });
+    fixture.detectChanges();
     expect(component.selectedBudgets().length).toBe(1);
     expect(component.selectedBudgets()[0].id).toBe('seo-budget');
   });
 
   it('should calculate total correctly when budgets are selected', () => {
     component.budgetForm.patchValue({ seo: true, ads: true });
-    expect(component.total()).toBe(700);
+    fixture.detectChanges();
+    expect(budgetService.totalPrice()).toBe(700);
   });
+
   it('should reset webExtra when web checkbox is unchecked', () => {
-    const resetSpy = vi.spyOn(component['budgetService'], 'resetWebExtra');
+    const resetSpy = vi.spyOn(budgetService, 'resetWebExtra');
     component.budgetForm.patchValue({ web: true });
+    fixture.detectChanges();
     component.budgetForm.patchValue({ web: false });
+    fixture.detectChanges();
     expect(resetSpy).toHaveBeenCalled();
   });
 });
