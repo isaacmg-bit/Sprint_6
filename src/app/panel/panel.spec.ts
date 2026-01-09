@@ -5,7 +5,7 @@ import { Panel } from './panel';
 describe('Panel', () => {
   let component: Panel;
   let fixture: ComponentFixture<Panel>;
-  let BudgetServiceService: BudgetService;
+  let budgetService: BudgetService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -15,7 +15,7 @@ describe('Panel', () => {
 
     fixture = TestBed.createComponent(Panel);
     component = fixture.componentInstance;
-    BudgetServiceService = TestBed.inject(BudgetService);
+    budgetService = TestBed.inject(BudgetService);
     await fixture.whenStable();
   });
 
@@ -56,7 +56,7 @@ describe('Panel', () => {
   });
 
   it('should call calculateWebExtra when form changes', () => {
-    const spy = vi.spyOn(BudgetServiceService, 'calculateWebExtra');
+    const spy = vi.spyOn(budgetService, 'calculateWebExtra');
     component.panelForm.patchValue({ pages: 3, languages: 2 });
     expect(spy).toHaveBeenCalledWith(3, 2);
   });

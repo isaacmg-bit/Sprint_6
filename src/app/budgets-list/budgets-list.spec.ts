@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BudgetsList } from './budgets-list';
 import { BudgetService } from '../services/budget';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 
 describe('BudgetsList', () => {
   let component: BudgetsList;
@@ -62,5 +62,18 @@ describe('BudgetsList', () => {
     component.budgetForm.patchValue({ web: false });
     fixture.detectChanges();
     expect(resetSpy).toHaveBeenCalled();
+  });
+
+  it('should clear query params when no budgets are selected', () => {
+    const router = TestBed.inject(Router);
+    const navigateSpy = vi.spyOn(router, 'navigate');
+
+    component.budgetForm.patchValue({ seo: false, ads: false, web: false });
+    fixture.detectChanges();
+
+    expect(navigateSpy).toHaveBeenCalledWith([], {
+      queryParams: {},
+      replaceUrl: true,
+    });
   });
 });
