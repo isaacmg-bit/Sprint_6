@@ -48,7 +48,6 @@ describe('Panel', () => {
     const spy = vi.spyOn(budgetService.webExtra, 'set');
 
     component.panelForm.patchValue({ pages: 2 });
-    await fixture.whenStable();
 
     expect(spy).toHaveBeenCalled();
   });
