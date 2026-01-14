@@ -1,7 +1,10 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, inject, effect, signal, DestroyRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BudgetService } from '../services/budget';
 import { PanelFormValues } from '../models/panelformvalues';
+
+const MIN_VALUE = 1;
 
 @Component({
   selector: 'app-panel',
@@ -12,24 +15,28 @@ import { PanelFormValues } from '../models/panelformvalues';
 })
 export class Panel {
   private readonly budgetService = inject(BudgetService);
-  private readonly MIN_VAL = 1;
-
-  modalType: keyof PanelFormValues | null = null;
-
+  private readonly destroyRef = inject(DestroyRef);
+  readonly modalType = signal<keyof PanelFormValues | null>(null);
   readonly panelForm = new FormGroup({
-    pages: new FormControl<number>(this.MIN_VAL, { nonNullable: true }),
-    languages: new FormControl<number>(this.MIN_VAL, { nonNullable: true }),
+    pages: new FormControl<number>(MIN_VALUE, { nonNullable: true }),
+    languages: new FormControl<number>(MIN_VALUE, { nonNullable: true }),
   });
 
   constructor() {
-    this.panelForm.valueChanges.subscribe((values) => {
-      const pages = values.pages ?? this.MIN_VAL;
-      const languages = values.languages ?? this.MIN_VAL;
+    this.setupFormSubscription();
+    this.setupSyncEffect();
+  }
 
+  private setupFormSubscription(): void {
+    this.panelForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
+      const pages = values.pages ?? MIN_VALUE;
+      const languages = values.languages ?? MIN_VALUE;
       const price = this.budgetService.calculateWebExtra(pages, languages);
       this.budgetService.webExtra.set(price);
     });
+  }
 
+  private setupSyncEffect(): void {
     effect(() => {
       this.panelForm.patchValue(
         {
@@ -41,25 +48,29 @@ export class Panel {
     });
   }
 
-  increment(controlName: keyof PanelFormValues) {
+  increment(controlName: keyof PanelFormValues): void {
+    this.updateControl(controlName, (value) => value + 1);
+  }
+
+  decrement(controlName: keyof PanelFormValues): void {
+    this.updateControl(controlName, (value) => (value > MIN_VALUE ? value - 1 : value));
+  }
+
+  private updateControl(
+    controlName: keyof PanelFormValues,
+    updater: (value: number) => number
+  ): void {
     const control = this.panelForm.get(controlName);
     if (control) {
-      control.setValue(control.value + 1);
+      control.setValue(updater(control.value));
     }
   }
 
-  decrement(controlName: keyof PanelFormValues) {
-    const control = this.panelForm.get(controlName);
-    if (control && control.value > this.MIN_VAL) {
-      control.setValue(control.value - 1);
-    }
+  openModal(type: keyof PanelFormValues): void {
+    this.modalType.set(type);
   }
 
-  openModal(type: keyof PanelFormValues) {
-    this.modalType = type;
-  }
-
-  closeModal() {
-    this.modalType = null;
+  closeModal(): void {
+    this.modalType.set(null);
   }
 }

@@ -99,7 +99,7 @@
   </fieldset>
 </form>
 
-@if (modalType) {
+@if (modalType()) {
 <aside
   class="fixed inset-0 z-50 flex items-center justify-center"
   role="dialog"
@@ -117,20 +117,20 @@
   <article class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 z-10">
     <header>
       <h3 id="modal-title" class="text-2xl text-center font-bold text-gray-900 mb-4">
-        {{ modalType === 'pages' ? 'Número de pàgines' : 'Número de llenguatges' }}
+        {{ modalType() === 'pages' ? 'Número de pàgines' : 'Número de llenguatges' }}
       </h3>
     </header>
 
     <section id="modal-description">
       <p class="text-gray-600 text-center leading-relaxed mb-2">
         {{
-          modalType === 'pages'
+          modalType() === 'pages'
             ? 'Afegeix el nombre de pàgines que tindrà el teu projecte.'
             : 'Afegeix el nombre de llenguatges que tindrà el teu projecte.'
         }}
       </p>
       <p class="text-gray-600 text-center leading-relaxed">
-        El cost de cada {{ modalType === 'pages' ? 'pàgina' : 'llenguatge' }} és de 30€.
+        El cost de cada {{ modalType() === 'pages' ? 'pàgina' : 'llenguatge' }} és de 30€.
       </p>
     </section>
 

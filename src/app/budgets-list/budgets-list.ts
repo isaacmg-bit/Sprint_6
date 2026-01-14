@@ -1,9 +1,37 @@
-import { Component, signal, inject, effect } from '@angular/core';
+import { Component, signal, inject, effect, DestroyRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BudgetService } from '../services/budget';
+import { UrlService } from '../services/url-service';
 import { Budgets } from '../models/budgets';
 import { Panel } from '../panel/panel';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { BudgetFormValues } from '../models/budgetformvalues';
+import { BudgetQueryParams } from '../models/budgetqueryparams';
+
+const DEFAULT_BUDGETS: Budgets[] = [
+  {
+    id: 'seo-budget',
+    name: 'Seo',
+    price: 300,
+    control: 'seo',
+    description: "Programació d'una web responsive completa",
+  },
+  {
+    id: 'ads-budget',
+    name: 'Ads',
+    price: 400,
+    control: 'ads',
+    description: "Programació d'una web responsive completa",
+  },
+  {
+    id: 'web-budget',
+    name: 'Web',
+    price: 500,
+    control: 'web',
+    description: "Programació d'una web responsive completa",
+  },
+];
 
 @Component({
   selector: 'app-budgets-list',
@@ -12,114 +40,59 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './budgets-list.css',
 })
 export class BudgetsList {
-  budgetService = inject(BudgetService);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-
-  private startingParams = this.route.snapshot.queryParams;
-
+  private readonly urlService = inject(UrlService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+  readonly budgetService = inject(BudgetService);
+  readonly budgets = signal<Budgets[]>(DEFAULT_BUDGETS);
+  readonly selectedBudgets = signal<Budgets[]>([]);
   readonly budgetForm = new FormGroup({
-    seo: new FormControl(this.startingParams['seo'] === 'true', { nonNullable: true }),
-    ads: new FormControl(this.startingParams['ads'] === 'true', { nonNullable: true }),
-    web: new FormControl(this.startingParams['web'] === 'true', { nonNullable: true }),
+    seo: new FormControl(false, { nonNullable: true }),
+    ads: new FormControl(false, { nonNullable: true }),
+    web: new FormControl(false, { nonNullable: true }),
   });
 
-  budgets = signal<Budgets[]>([
-    {
-      id: 'seo-budget',
-      name: 'Seo',
-      price: 300,
-      control: 'seo',
-      description: "Programació d'una web responsive completa",
-    },
-    {
-      id: 'ads-budget',
-      name: 'Ads',
-      price: 400,
-      control: 'ads',
-      description: "Programació d'una web responsive completa",
-    },
-    {
-      id: 'web-budget',
-      name: 'Web',
-      price: 500,
-      control: 'web',
-      description: "Programació d'una web responsive completa",
-    },
-  ]);
-
-  selectedBudgets = signal<Budgets[]>([]);
-
   constructor() {
-    const initialSelected = this.budgets().filter(
-      (budget) => this.startingParams[budget.control] === 'true'
+    this.initializeBudgets();
+    this.setupFormSubscription();
+    this.setupSyncEffect();
+  }
+
+  private initializeBudgets(): void {
+    const queryParams = this.route.snapshot.queryParams;
+    const initialSelected = this.budgetService.initializeFromQueryParams(
+      queryParams,
+      this.budgets()
     );
-
-    this.budgetService.selectedServices.set(initialSelected);
     this.selectedBudgets.set(initialSelected);
+    this.updateFormFromParams(queryParams);
+  }
 
-    const pages = this.startingParams['pages'];
-    const languages = this.startingParams['languages'];
-
-    if (pages) this.budgetService.currentPages.set(Number(pages));
-    if (languages) this.budgetService.currentLanguages.set(Number(languages));
-
-    if (this.startingParams['web'] === 'true') {
-      const extraPrice = this.budgetService.calculateWebExtra(
-        this.budgetService.currentPages(),
-        this.budgetService.currentLanguages()
-      );
-      this.budgetService.webExtra.set(extraPrice);
-    }
-
-    this.budgetForm.valueChanges.subscribe((values) => {
-      const selected = this.budgets().filter((service) => values[service.control]);
-      if (!values.web) {
-        this.budgetService.resetWebExtra();
-      }
-      this.selectedBudgets.set(selected);
-      this.budgetService.selectedServices.set(selected);
-      this.updateURL();
-    });
-
-    effect(() => {
-      this.budgetService.currentPages();
-      this.budgetService.currentLanguages();
-      this.updateURL();
+  private updateFormFromParams(params: BudgetQueryParams): void {
+    this.budgetForm.patchValue({
+      seo: params['seo'] === 'true',
+      ads: params['ads'] === 'true',
+      web: params['web'] === 'true',
     });
   }
 
-  updateURL(): void {
-    const formValues = this.budgetForm.value;
-    const currentPages = this.budgetService.currentPages();
-    const currentLanguages = this.budgetService.currentLanguages();
-    const queryParams: any = {};
+  private setupFormSubscription(): void {
+    this.budgetForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
+      this.updateSelectedBudgets(values as BudgetFormValues);
+      this.urlService.updateURL(values as BudgetFormValues);
+    });
+  }
 
-    if (!formValues.seo && !formValues.ads && !formValues.web) {
-      this.router.navigate([], {
-        queryParams: {},
-        replaceUrl: true,
-      });
-      return;
-    }
+  private updateSelectedBudgets(formValues: BudgetFormValues): void {
+    const selected = this.budgetService.updateSelectedFromForm(formValues, this.budgets());
+    this.selectedBudgets.set(selected);
+  }
 
-    if (formValues.seo) {
-      queryParams['seo'] = true;
-    }
-    if (formValues.ads) {
-      queryParams['ads'] = true;
-    }
-    if (formValues.web) {
-      queryParams['web'] = true;
-
-      if (currentPages > 1 || currentLanguages > 1) {
-        queryParams['pages'] = currentPages;
-        queryParams['languages'] = currentLanguages;
-      }
-    }
-    this.router.navigate([], {
-      queryParams,
-      replaceUrl: true,
+  private setupSyncEffect(): void {
+    effect(() => {
+      this.budgetService.currentPages();
+      this.budgetService.currentLanguages();
+      this.urlService.updateURL(this.budgetForm.value as BudgetFormValues);
     });
   }
 }

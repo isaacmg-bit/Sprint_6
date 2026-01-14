@@ -1,5 +1,5 @@
 export interface BudgetFormValues {
-  seo: boolean;
-  ads: boolean;
-  web: boolean;
+  seo?: boolean;
+  ads?: boolean;
+  web?: boolean;
 }

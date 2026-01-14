@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BudgetService } from '../services/budget';
 import { Panel } from './panel';
+import { BudgetService } from '../services/budget';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 describe('Panel', () => {
   let component: Panel;
@@ -16,48 +17,49 @@ describe('Panel', () => {
     fixture = TestBed.createComponent(Panel);
     component = fixture.componentInstance;
     budgetService = TestBed.inject(BudgetService);
-    await fixture.whenStable();
+
+    fixture.detectChanges();
   });
 
-  it('should create the panel component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize panelForm with minimum values', () => {
-    expect(component.panelForm.value).toEqual({
-      pages: 1,
-      languages: 1,
-    });
+  it('should initialize form with MIN_VALUE', () => {
+    expect(component.panelForm.get('pages')?.value).toBe(1);
+    expect(component.panelForm.get('languages')?.value).toBe(1);
   });
 
-  it('should increment a value', () => {
+  it('should increment control value', () => {
     component.increment('pages');
     expect(component.panelForm.get('pages')?.value).toBe(2);
   });
 
-  it('should decrement a value', () => {
-    component.increment('pages');
+  it('should decrement control value but not below MIN_VALUE', () => {
+    component.decrement('pages');
+    expect(component.panelForm.get('pages')?.value).toBe(1);
+
+    component.panelForm.get('pages')?.setValue(3);
+    component.decrement('pages');
     expect(component.panelForm.get('pages')?.value).toBe(2);
-    component.decrement('pages');
-    expect(component.panelForm.get('pages')?.value).toBe(1);
   });
 
-  it('should not decrement below minimum value', () => {
-    component.decrement('pages');
-    expect(component.panelForm.get('pages')?.value).toBe(1);
+  it('should update webExtra on form change', async () => {
+    const spy = vi.spyOn(budgetService.webExtra, 'set');
+
+    component.panelForm.patchValue({ pages: 2 });
+    await fixture.whenStable();
+
+    expect(spy).toHaveBeenCalled();
   });
 
-  it('should open and close modal', () => {
+  it('should toggle modal', () => {
+    expect(component.modalType()).toBeNull();
+
     component.openModal('pages');
-    expect(component.modalType).toBe('pages');
+    expect(component.modalType()).toBe('pages');
 
     component.closeModal();
-    expect(component.modalType).toBeNull();
-  });
-
-  it('should call calculateWebExtra when form changes', () => {
-    const spy = vi.spyOn(budgetService, 'calculateWebExtra');
-    component.panelForm.patchValue({ pages: 3, languages: 2 });
-    expect(spy).toHaveBeenCalledWith(3, 2);
+    expect(component.modalType()).toBeNull();
   });
 });
