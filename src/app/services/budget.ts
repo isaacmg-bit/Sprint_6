@@ -30,6 +30,7 @@ export class BudgetService {
   });
 
   resetWebExtra(): void {
+    this.webExtra.set(0);
     this.currentPages.set(this.DEFAULT_PAGES);
     this.currentLanguages.set(this.DEFAULT_LANGUAGES);
   }

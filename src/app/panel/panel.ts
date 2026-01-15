@@ -27,14 +27,14 @@ export class Panel {
     this.setupSyncEffect();
   }
 
-  private setupFormSubscription(): void {
-    this.panelForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
-      const pages = values.pages ?? MIN_VALUE;
-      const languages = values.languages ?? MIN_VALUE;
-      const price = this.budgetService.calculateWebExtra(pages, languages);
-      this.budgetService.webExtra.set(price);
+private setupFormSubscription(): void {
+  this.panelForm.valueChanges
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe((values) => {
+      this.budgetService.currentPages.set(values.pages ?? MIN_VALUE);
+      this.budgetService.currentLanguages.set(values.languages ?? MIN_VALUE);
     });
-  }
+}
 
   private setupSyncEffect(): void {
     effect(() => {
