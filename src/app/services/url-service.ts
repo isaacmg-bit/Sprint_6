@@ -24,18 +24,15 @@ export class UrlService {
       return;
     }
 
-    if (formValues.seo) {
-      queryParams['seo'] = 'true';
-    }
-    if (formValues.ads) {
-      queryParams['ads'] = 'true';
-    }
+    if (formValues.seo) queryParams['seo'] = 'true';
+    if (formValues.ads) queryParams['ads'] = 'true';
+
     if (formValues.web) {
       queryParams['web'] = 'true';
 
       if (currentPages > 1 || currentLanguages > 1) {
-        queryParams['pages'] = currentPages.toString();
-        queryParams['languages'] = currentLanguages.toString();
+        queryParams['pages'] = String(currentPages);
+        queryParams['languages'] = String(currentLanguages);
       }
     }
     this.router.navigate([], {
