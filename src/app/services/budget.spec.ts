@@ -14,7 +14,11 @@ describe('Budget', () => {
   });
 
   it('should calculate web extra price correctly', () => {
-    const price = service.calculateWebExtra(3, 2);
+    service.currentPages.set(3);
+    service.currentLanguages.set(2);
+
+    const price = service.calculateWebExtra();
+
     expect(price).toBe(180);
   });
 

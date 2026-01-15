@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Panel } from './panel';
 import { BudgetService } from '../services/budget';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('Panel', () => {
   let component: Panel;
@@ -44,12 +44,11 @@ describe('Panel', () => {
     expect(component.panelForm.get('pages')?.value).toBe(2);
   });
 
-  it('should update webExtra on form change', async () => {
-    const spy = vi.spyOn(budgetService.webExtra, 'set');
+  it('should calculate web extra correctly', () => {
+    budgetService.currentPages.set(2);
+    budgetService.currentLanguages.set(1);
 
-    component.panelForm.patchValue({ pages: 2 });
-
-    expect(spy).toHaveBeenCalled();
+    expect(budgetService.calculateWebExtra()).toBe(60);
   });
 
   it('should toggle modal', () => {
