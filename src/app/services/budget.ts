@@ -8,31 +8,30 @@ import { BudgetQueryParams } from '../models/budgetqueryparams';
   providedIn: 'root',
 })
 export class BudgetService {
+  private readonly PRICE_PER_UNIT = 30;
+  private readonly DEFAULT_PAGES = 1;
+  private readonly DEFAULT_LANGUAGES = 1;
+
   readonly webExtra = signal<number>(0);
   readonly budgetDB = signal<BudgetPersonalData[]>([]);
   readonly selectedServices = signal<Budgets[]>([]);
-  currentPages = signal<number>(1);
-  currentLanguages = signal<number>(1);
-  private readonly PRICE_PER_UNIT = 30;
+
+  currentPages = signal<number>(this.DEFAULT_PAGES);
+  currentLanguages = signal<number>(this.DEFAULT_LANGUAGES);
+
+  readonly calculateWebExtra = computed(() => {
+    return this.currentPages() * this.currentLanguages() * this.PRICE_PER_UNIT;
+  });
 
   readonly totalPrice = computed(() => {
-    const servicesPrice = this.selectedServices().reduce(
-      (sum: number, service: Budgets) => sum + service.price,
-      0
-    );
+    const servicesPrice = this.selectedServices().reduce((sum, service) => sum + service.price, 0);
+
     return servicesPrice + this.webExtra();
   });
 
-  calculateWebExtra(pages: number, languages: number): number {
-    this.currentPages.set(pages);
-    this.currentLanguages.set(languages);
-    return pages * languages * this.PRICE_PER_UNIT;
-  }
-
   resetWebExtra(): void {
-    this.webExtra.set(0);
-    this.currentPages.set(1);
-    this.currentLanguages.set(1);
+    this.currentPages.set(this.DEFAULT_PAGES);
+    this.currentLanguages.set(this.DEFAULT_LANGUAGES);
   }
 
   addBudget(budget: BudgetPersonalData): void {
@@ -56,8 +55,7 @@ export class BudgetService {
     if (languages) this.currentLanguages.set(Number(languages));
 
     if (queryParams['web'] === 'true') {
-      const extraPrice = this.calculateWebExtra(this.currentPages(), this.currentLanguages());
-      this.webExtra.set(extraPrice);
+      this.webExtra.set(this.calculateWebExtra());
     }
 
     return initialSelected;
