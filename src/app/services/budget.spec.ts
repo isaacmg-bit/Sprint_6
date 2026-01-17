@@ -31,4 +31,42 @@ describe('Budget', () => {
     service.resetWebExtra();
     expect(service.webExtra()).toBe(0);
   });
+
+  it('should calculate total price from selected services and web extra', () => {
+    service.selectedServices.set([{ price: 300 } as any, { price: 200 } as any]);
+
+    service.webExtra.set(60);
+
+    expect(service.totalPrice()).toBe(560);
+  });
+  it('should initialize selected services and webExtra from query params', () => {
+    const budgets = [{ control: 'seo', price: 300 } as any, { control: 'web', price: 500 } as any];
+
+    const params = {
+      seo: 'true',
+      web: 'true',
+      pages: '2',
+      languages: '1',
+    };
+
+    const result = service.initializeFromQueryParams(params as any, budgets);
+
+    expect(result.length).toBe(2);
+    expect(service.selectedServices().length).toBe(2);
+    expect(service.currentPages()).toBe(2);
+    expect(service.currentLanguages()).toBe(1);
+    expect(service.webExtra()).toBe(60);
+  });
+
+  it('should reset web extra when web is unchecked', () => {
+    service.webExtra.set(120);
+    service.currentPages.set(3);
+    service.currentLanguages.set(2);
+
+    service.updateSelectedFromForm({ web: false, seo: false, ads: false } as any, []);
+
+    expect(service.webExtra()).toBe(0);
+    expect(service.currentPages()).toBe(1);
+    expect(service.currentLanguages()).toBe(1);
+  });
 });
