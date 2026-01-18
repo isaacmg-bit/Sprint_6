@@ -34,24 +34,41 @@ describe('BudgetsList', () => {
     expect(component.budgets()[0].id).toBe('seo-budget');
   });
 
-  it('should initialize selectedBudgets as empty', () => {
-    expect(component.selectedBudgets().length).toBe(0);
-  });
-
-  it('should update selectedBudgets when form changes', async () => {
-    vi.spyOn(budgetService, 'updateSelectedFromForm').mockReturnValue([component.budgets()[0]]);
-
+  it('should update selectedServices when checkbox changes', () => {
     component.budgetForm.patchValue({ seo: true });
-    await fixture.whenStable();
+    component.onCheckboxChange();
 
-    expect(component.selectedBudgets().length).toBe(1);
+    expect(budgetService.selectedServices().length).toBe(1);
+    expect(budgetService.selectedServices()[0].control).toBe('seo');
   });
 
-  it('should call urlService.updateURL on form change', async () => {
+  it('should call updateURL when checkbox changes', () => {
     const spy = vi.spyOn(urlService, 'updateURL');
 
     component.budgetForm.patchValue({ seo: true });
-    await fixture.whenStable();
+    component.onCheckboxChange();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should reset webExtra when web is unchecked', () => {
+    budgetService.currentPages.set(5);
+    budgetService.currentLanguages.set(2);
+    component.budgetForm.patchValue({ web: true });
+    component.onCheckboxChange();
+
+    expect(budgetService.webExtra()).toBe(300);
+
+    component.budgetForm.patchValue({ web: false });
+    component.onCheckboxChange();
+
+    expect(budgetService.webExtra()).toBe(30);
+  });
+
+  it('should update URL when panel values change', () => {
+    const spy = vi.spyOn(urlService, 'updateURL');
+
+    component.onPanelValuesChanged();
 
     expect(spy).toHaveBeenCalled();
   });
