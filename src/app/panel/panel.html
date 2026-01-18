@@ -1,7 +1,6 @@
 <form
   [formGroup]="panelForm"
   class="p-6 mt-4 w-100 border-2 border-gray-100 rounded-3xl bg-white shadow-sm max-w-sm"
-  role="form"
   aria-label="Configuració de pàgines i llenguatges"
 >
   <fieldset class="flex items-center justify-between mb-6">
@@ -17,16 +16,12 @@
 
     <label for="pages-input" class="font-semibold text-gray-700 w-48"> Número de pàgines: </label>
 
-    <section class="flex items-center gap-2" role="group" aria-labelledby="pages-label">
-      <span id="pages-label" class="sr-only">Control de número de pàgines</span>
-
+    <section class="flex items-center gap-2">
       <button
         type="button"
         (click)="decrement('pages')"
         class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
         aria-label="Reduir número de pàgines"
-        [attr.aria-controls]="'pages-input'"
-        tabindex="0"
       ></button>
 
       <input
@@ -36,7 +31,6 @@
         readonly
         class="w-15 text-center border-2 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold text-gray-800 bg-transparent"
         [attr.aria-label]="'Número de pàgines: ' + panelForm.get('pages')?.value"
-        aria-readonly="true"
       />
 
       <button
@@ -44,8 +38,6 @@
         (click)="increment('pages')"
         class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
         aria-label="Augmentar número de pàgines"
-        [attr.aria-controls]="'pages-input'"
-        tabindex="0"
       ></button>
     </section>
   </fieldset>
@@ -65,16 +57,12 @@
       Número de llenguatges:
     </label>
 
-    <section class="ml-1.5 flex items-center gap-2" role="group" aria-labelledby="languages-label">
-      <span id="languages-label" class="sr-only">Control de número de llenguatges</span>
-
+    <section class="ml-1.5 flex items-center gap-2">
       <button
         type="button"
         (click)="decrement('languages')"
         class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
         aria-label="Reduir número de llenguatges"
-        [attr.aria-controls]="'languages-input'"
-        tabindex="0"
       ></button>
 
       <input
@@ -84,7 +72,6 @@
         readonly
         class="w-15 text-center border-2 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold text-gray-800 bg-transparent"
         [attr.aria-label]="'Número de llenguatges: ' + panelForm.get('languages')?.value"
-        aria-readonly="true"
       />
 
       <button
@@ -92,8 +79,6 @@
         (click)="increment('languages')"
         class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
         aria-label="Augmentar número de llenguatges"
-        [attr.aria-controls]="'languages-input'"
-        tabindex="0"
       ></button>
     </section>
   </fieldset>

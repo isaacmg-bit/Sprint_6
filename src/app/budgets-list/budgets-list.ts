@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { UrlService } from '../services/url-service';
@@ -36,7 +36,7 @@ const DEFAULT_BUDGETS: Budgets[] = [
   templateUrl: './budgets-list.html',
   styleUrl: './budgets-list.css',
 })
-export class BudgetsList {
+export class BudgetsList implements OnInit {
   private readonly urlService = inject(UrlService);
   private readonly route = inject(ActivatedRoute);
   readonly budgetService = inject(BudgetService);

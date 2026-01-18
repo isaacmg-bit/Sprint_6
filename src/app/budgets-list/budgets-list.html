@@ -2,7 +2,6 @@
   <form
     [formGroup]="budgetForm"
     class="space-y-4"
-    role="form"
     aria-label="Formulari de pressupostos"
   >
     @for (budget of budgets(); track budget.id) {
@@ -10,7 +9,6 @@
         class="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-6 transition-all"
         [class.border-4]="budgetForm.get(budget.control)?.value"
         [class.border-green-500]="budgetForm.get(budget.control)?.value"
-        [attr.aria-labelledby]="'budget-title-' + budget.id"
       >
         <legend class="sr-only">{{ budget.name }}</legend>
 
@@ -41,7 +39,6 @@
                 (change)="onCheckboxChange()"
                 class="w-4 h-4 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 [attr.aria-describedby]="'budget-desc-' + budget.id"
-                [attr.aria-checked]="budgetForm.get(budget.control)?.value"
               />
               <span class="text-gray-600 text-sm">Afegir</span>
             </label>
