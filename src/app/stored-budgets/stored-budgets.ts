@@ -14,23 +14,24 @@ type SortOrder = 'ascending' | 'descending';
   styleUrl: './stored-budgets.css',
 })
 export class StoredBudgets {
-  name = signal<string>('');
-  phone = signal<string>('');
-  email = signal<string>('');
+  name = '';
+  phone = '';
+  email = '';
+
   sortCriteria = signal<SortCriteria>('name');
   sortOrder = signal<SortOrder>('ascending');
   searchTerm = signal<string>('');
 
-  public budgetService = inject(BudgetService);
+  budgetService = inject(BudgetService);
 
   submitBudget(): void {
-    if (!this.name() || !this.email()) return;
+    if (!this.name || !this.email) return;
 
     const newBudget: BudgetPersonalData = {
       id: crypto.randomUUID(),
-      name: this.name(),
-      phone: Number(this.phone()),
-      email: this.email(),
+      name: this.name,
+      phone: Number(this.phone),
+      email: this.email,
       date: new Date(),
       services: [...this.budgetService.selectedServices()],
       totalPrice: this.budgetService.totalPrice(),
@@ -39,7 +40,6 @@ export class StoredBudgets {
     };
 
     this.budgetService.addBudget(newBudget);
-
     this.resetForm();
   }
 
@@ -53,29 +53,39 @@ export class StoredBudgets {
   }
 
   sortedBudgets = computed(() => {
-    const criteria = this.sortCriteria();
-    const order = this.sortOrder();
-    let budgets = [...this.budgetService.budgetDB()];
+    let budgets = this.budgetService.budgetDB();
     const search = this.searchTerm().toLowerCase();
-
+    
     if (search) {
       budgets = budgets.filter((budget) => budget.name.toLowerCase().includes(search));
     }
 
-    if (criteria === 'name') {
-      budgets.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (criteria === 'price') {
-      budgets.sort((a, b) => a.totalPrice - b.totalPrice);
-    } else if (criteria === 'date') {
-      budgets.sort((a, b) => a.date.getTime() - b.date.getTime());
+    budgets = [...budgets];
+
+    const criteria = this.sortCriteria();
+
+    switch (criteria) {
+      case 'name':
+        budgets.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'price':
+        budgets.sort((a, b) => a.totalPrice - b.totalPrice);
+        break;
+      case 'date':
+        budgets.sort((a, b) => a.date.getTime() - b.date.getTime());
+        break;
     }
 
-    return order === 'descending' ? budgets.reverse() : budgets;
+    if (this.sortOrder() === 'descending') {
+      budgets.reverse();
+    }
+
+    return budgets;
   });
 
   private resetForm(): void {
-    this.name.set('');
-    this.phone.set('');
-    this.email.set('');
+    this.name = '';
+    this.phone = '';
+    this.email = '';
   }
 }

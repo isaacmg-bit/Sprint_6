@@ -1,5 +1,6 @@
 <section class="bg-white rounded-2xl shadow-md p-6 max-w-2xl w-full mx-auto my-6">
   <h2 class="text-xl font-bold mb-4">Demanar pressupost</h2>
+
   <form
     class="flex flex-col sm:flex-row gap-3 w-full"
     (ngSubmit)="submitBudget()"
@@ -80,8 +81,6 @@
 
       <button
         (click)="setSortCriteria('date')"
-        (keydown.enter)="setSortCriteria('date')"
-        (keydown.space)="setSortCriteria('date')"
         class="hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 font-medium text-gray-700"
         [attr.aria-pressed]="sortCriteria() === 'date'"
         aria-label="Ordenar per data"
@@ -91,8 +90,6 @@
 
       <button
         (click)="setSortCriteria('price')"
-        (keydown.enter)="setSortCriteria('price')"
-        (keydown.space)="setSortCriteria('price')"
         class="hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 font-medium text-gray-700"
         [attr.aria-pressed]="sortCriteria() === 'price'"
         aria-label="Ordenar per import"
@@ -102,8 +99,6 @@
 
       <button
         (click)="setSortCriteria('name')"
-        (keydown.enter)="setSortCriteria('name')"
-        (keydown.space)="setSortCriteria('name')"
         class="hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 font-medium text-gray-700"
         [attr.aria-pressed]="sortCriteria() === 'name'"
         aria-label="Ordenar per nom"
@@ -115,74 +110,74 @@
 
   <ul class="space-y-4 max-w-5xl mx-auto p-4" role="list" aria-label="Llista de pressupostos">
     @for (budget of sortedBudgets(); track budget.id) {
-    <li>
-      <article
-        class="bg-white rounded-2xl shadow-md p-6 max-w-2xl w-full mx-auto my-6 flex items-center"
-        [attr.aria-labelledby]="'budget-name-' + budget.id"
-      >
-        <header class="w-1/4">
-          <h2
-            [id]="'budget-name-' + budget.id"
-            class="text-xl font-bold text-gray-900 leading-tight"
-          >
-            {{ budget.name }}
-          </h2>
-          <address class="text-gray-400 text-sm mt-1 not-italic">
-            <p>
-              <a
-                [href]="'mailto:' + budget.email"
-                class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-                [attr.aria-label]="'Enviar email a ' + budget.email"
-              >
-                {{ budget.email }}
-              </a>
-            </p>
-            <p>
-              <a
-                [href]="'tel:' + budget.phone"
-                class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-                [attr.aria-label]="'Trucar a ' + budget.phone"
-              >
-                {{ budget.phone }}
-              </a>
-            </p>
-          </address>
-        </header>
+      <li>
+        <article
+          class="bg-white rounded-2xl shadow-md p-6 max-w-2xl w-full mx-auto my-6 flex items-center"
+          [attr.aria-labelledby]="'budget-name-' + budget.id"
+        >
+          <header class="w-1/4">
+            <h2
+              [id]="'budget-name-' + budget.id"
+              class="text-xl font-bold text-gray-900 leading-tight"
+            >
+              {{ budget.name }}
+            </h2>
+            <address class="text-gray-400 text-sm mt-1 not-italic">
+              <p>
+                <a
+                  [href]="'mailto:' + budget.email"
+                  class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  [attr.aria-label]="'Enviar email a ' + budget.email"
+                >
+                  {{ budget.email }}
+                </a>
+              </p>
+              <p>
+                <a
+                  [href]="'tel:' + budget.phone"
+                  class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  [attr.aria-label]="'Trucar a ' + budget.phone"
+                >
+                  {{ budget.phone }}
+                </a>
+              </p>
+            </address>
+          </header>
 
-        <section class="flex-1 px-8" [attr.aria-labelledby]="'services-heading-' + budget.id">
-          <h3 [id]="'services-heading-' + budget.id" class="font-bold text-sm mb-1 text-gray-900">
-            Serveis contractats:
-          </h3>
-          <ul class="text-sm text-gray-600" role="list">
-            @for (service of budget.services; track service.id) {
-            <li class="flex items-start">
-              <span class="mr-2" aria-hidden="true">•</span>
-              <span>
-                {{ service.name }}
-                @if (service.control === 'web' && budget.pages > 0) {
-                <span class="text-gray-400 text-xs italic">
-                  ({{ budget.pages }} pàgines, {{ budget.languages }} llenguatges)
-                </span>
-                }
-              </span>
-            </li>
-            }
-          </ul>
-        </section>
+          <section class="flex-1 px-8" [attr.aria-labelledby]="'services-heading-' + budget.id">
+            <h3 [id]="'services-heading-' + budget.id" class="font-bold text-sm mb-1 text-gray-900">
+              Serveis contractats:
+            </h3>
+            <ul class="text-sm text-gray-600" role="list">
+              @for (service of budget.services; track service.id) {
+                <li class="flex items-start">
+                  <span class="mr-2" aria-hidden="true">•</span>
+                  <span>
+                    {{ service.name }}
+                    @if (service.control === 'web' && budget.pages > 0) {
+                      <span class="text-gray-400 text-xs italic">
+                        ({{ budget.pages }} pàgines, {{ budget.languages }} llenguatges)
+                      </span>
+                    }
+                  </span>
+                </li>
+              }
+            </ul>
+          </section>
 
-        <footer class="w-1/4 text-right">
-          <p class="text-gray-400 text-sm font-medium">Total:</p>
-          <data
-            [value]="budget.totalPrice"
-            class="flex items-baseline justify-end gap-1"
-            [attr.aria-label]="'Preu total: ' + budget.totalPrice + ' euros'"
-          >
-            <span class="text-4xl font-black text-gray-900">{{ budget.totalPrice }}</span>
-            <span class="text-2xl font-bold text-gray-900" aria-hidden="true">€</span>
-          </data>
-        </footer>
-      </article>
-    </li>
+          <footer class="w-1/4 text-right">
+            <p class="text-gray-400 text-sm font-medium">Total:</p>
+            <data
+              [value]="budget.totalPrice"
+              class="flex items-baseline justify-end gap-1"
+              [attr.aria-label]="'Preu total: ' + budget.totalPrice + ' euros'"
+            >
+              <span class="text-4xl font-black text-gray-900">{{ budget.totalPrice }}</span>
+              <span class="text-2xl font-bold text-gray-900" aria-hidden="true">€</span>
+            </data>
+          </footer>
+        </article>
+      </li>
     }
   </ul>
 </section>

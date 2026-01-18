@@ -62,7 +62,7 @@ describe('BudgetsList', () => {
     component.budgetForm.patchValue({ web: false });
     component.onCheckboxChange();
 
-    expect(budgetService.webExtra()).toBe(30);
+    expect(budgetService.webExtra()).toBe(0);
   });
 
   it('should update URL when panel values change', () => {

@@ -40,7 +40,7 @@ describe('BudgetService', () => {
 
     expect(service.currentPages()).toBe(1);
     expect(service.currentLanguages()).toBe(1);
-    expect(service.webExtra()).toBe(30);
+    expect(service.webExtra()).toBe(0);
   });
 
   it('should calculate total price from selected services and web extra', () => {
@@ -73,7 +73,7 @@ describe('BudgetService', () => {
 
     service.updateSelectedFromForm({ web: false, seo: false, ads: false } as any, []);
 
-    expect(service.webExtra()).toBe(30);
+    expect(service.webExtra()).toBe(0);
     expect(service.currentPages()).toBe(1);
     expect(service.currentLanguages()).toBe(1);
   });

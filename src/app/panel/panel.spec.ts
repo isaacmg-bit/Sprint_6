@@ -52,7 +52,7 @@ describe('Panel', () => {
 
     component.increment('pages');
 
-    expect(budgetService.webExtra()).toBe(60);
+    expect(budgetService.webExtra()).toBe(120);
   });
 
   it('should emit valuesChanged event when value changes', () => {

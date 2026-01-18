@@ -20,7 +20,14 @@ export class BudgetService {
   currentLanguages = signal<number>(this.DEFAULT_LANGUAGES);
 
   readonly webExtra = computed(() => {
-    return this.currentPages() * this.currentLanguages() * this.PRICE_PER_UNIT;
+    const pages = this.currentPages();
+    const languages = this.currentLanguages();
+
+    if (pages === 1 && languages === 1) {
+      return 0;
+    }
+
+    return pages * languages * this.PRICE_PER_UNIT;
   });
 
   readonly totalPrice = computed(() => {
