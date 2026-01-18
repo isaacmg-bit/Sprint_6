@@ -71,6 +71,7 @@ export class BudgetsList {
     if (params['languages']) {
       this.budgetService.currentLanguages.set(Number(params['languages']));
     }
+    
     this.updateSelectedServices();
   }
 
@@ -80,6 +81,7 @@ export class BudgetsList {
     if (!this.budgetForm.value.web) {
       this.budgetService.resetWebExtra();
     }
+
     this.updateURL();
   }
 

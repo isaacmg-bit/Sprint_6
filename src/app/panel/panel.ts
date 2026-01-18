@@ -48,6 +48,7 @@ export class Panel {
     } else {
       this.budgetService.currentLanguages.set(value);
     }
+    
     this.valuesChanged.emit();
   }
 
