@@ -51,13 +51,16 @@
   </form>
 </section>
 
-<hr class="border-t-4 border-dashed border-gray-300 mt-12 mb-10 w-175 mx-auto" />
+<hr class="border-t-4 border-dashed border-gray-300 mt-12 mb-10 w-full max-w-2xl mx-auto" />
 
-<section class="space-y-4 max-w-2xl mx-auto" aria-labelledby="budgets-heading">
-  <header class="flex justify-between items-center mb-6">
-    <h1 id="budgets-heading" class="text-2xl font-bold">Pressupostos en curs:</h1>
+<section class="space-y-4 max-w-2xl mx-auto px-4" aria-labelledby="budgets-heading">
+  <header class="mb-6">
+    <h1 id="budgets-heading" class="text-2xl font-bold mb-4">Pressupostos en curs:</h1>
 
-    <nav class="flex items-center gap-4 text-sm" aria-label="Controls de cerca i ordenació">
+    <nav
+      class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm"
+      aria-label="Controls de cerca i ordenació"
+    >
       <label for="search-input" class="sr-only">Buscar per nom</label>
       <input
         id="search-input"
@@ -65,61 +68,64 @@
         type="search"
         placeholder="Buscar per nom"
         (input)="searchTerm.set(searchInput.value)"
-        class="h-10 w-56 px-3 text-sm text-slate-700 bg-white border border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
+        class="h-10 w-full sm:w-56 px-3 text-sm text-slate-700 bg-white border border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
       />
 
-      <button
-        (click)="setSortCriteria('date')"
-        class="hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 font-medium text-gray-700"
-        [attr.aria-pressed]="sortCriteria() === 'date'"
-        aria-label="Ordenar per data"
-      >
-        Data {{ sortCriteria() === 'date' ? (sortOrder() === 'ascending' ? '↑' : '↓') : '' }}
-      </button>
+      <div class="flex items-center gap-2 sm:gap-4">
+        <button
+          (click)="setSortCriteria('date')"
+          class="flex-1 sm:flex-none hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 font-medium text-gray-700 text-xs sm:text-sm"
+          [attr.aria-pressed]="sortCriteria() === 'date'"
+          aria-label="Ordenar per data"
+        >
+          Data {{ sortCriteria() === 'date' ? (sortOrder() === 'ascending' ? '↑' : '↓') : '' }}
+        </button>
 
-      <button
-        (click)="setSortCriteria('price')"
-        class="hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 font-medium text-gray-700"
-        [attr.aria-pressed]="sortCriteria() === 'price'"
-        aria-label="Ordenar per import"
-      >
-        Import {{ sortCriteria() === 'price' ? (sortOrder() === 'ascending' ? '↑' : '↓') : '' }}
-      </button>
+        <button
+          (click)="setSortCriteria('price')"
+          class="flex-1 sm:flex-none hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 font-medium text-gray-700 text-xs sm:text-sm"
+          [attr.aria-pressed]="sortCriteria() === 'price'"
+          aria-label="Ordenar per import"
+        >
+          Import {{ sortCriteria() === 'price' ? (sortOrder() === 'ascending' ? '↑' : '↓') : '' }}
+        </button>
 
-      <button
-        (click)="setSortCriteria('name')"
-        class="hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 font-medium text-gray-700"
-        [attr.aria-pressed]="sortCriteria() === 'name'"
-        aria-label="Ordenar per nom"
-      >
-        Nom {{ sortCriteria() === 'name' ? (sortOrder() === 'ascending' ? '↑' : '↓') : '' }}
-      </button>
+        <button
+          (click)="setSortCriteria('name')"
+          class="flex-1 sm:flex-none hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 font-medium text-gray-700 text-xs sm:text-sm"
+          [attr.aria-pressed]="sortCriteria() === 'name'"
+          aria-label="Ordenar per nom"
+        >
+          Nom {{ sortCriteria() === 'name' ? (sortOrder() === 'ascending' ? '↑' : '↓') : '' }}
+        </button>
+      </div>
     </nav>
   </header>
 
-  <ul class="space-y-4 max-w-5xl mx-auto p-4">
+  <ul class="space-y-4">
     @for (budget of sortedBudgets(); track budget.id) {
       <li>
         <article
-          class="bg-white rounded-2xl shadow-md p-6 max-w-2xl w-full mx-auto my-6 flex items-center"
+          class="bg-white rounded-2xl shadow-md p-4 sm:p-6 w-full flex flex-col md:flex-row md:items-center gap-4"
         >
-          <header class="w-1/4">
+          <header class="md:w-1/4">
             <h2
               [id]="'budget-name-' + budget.id"
-              class="text-xl font-bold text-gray-900 leading-tight"
+              class="text-lg sm:text-xl font-bold text-gray-900 leading-tight"
             >
               {{ budget.name }}
             </h2>
-            <address class="text-gray-400 text-sm mt-1 not-italic">
+            <address class="text-gray-400 text-xs sm:text-sm mt-1 not-italic">
               <p>
                 <a
                   [href]="'mailto:' + budget.email"
-                  class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded break-all"
                   [attr.aria-label]="'Enviar email a ' + budget.email"
                 >
                   {{ budget.email }}
                 </a>
               </p>
+
               <p>
                 <a
                   [href]="'tel:' + budget.phone"
@@ -132,11 +138,14 @@
             </address>
           </header>
 
-          <section class="flex-1 px-8">
-            <h3 [id]="'services-heading-' + budget.id" class="font-bold text-sm mb-1 text-gray-900">
+          <section class="flex-1 md:px-8">
+            <h3
+              [id]="'services-heading-' + budget.id"
+              class="font-bold text-xs sm:text-sm mb-1 text-gray-900"
+            >
               Serveis contractats:
             </h3>
-            <ul class="text-sm text-gray-600">
+            <ul class="text-xs sm:text-sm text-gray-600">
               @for (service of budget.services; track service.id) {
                 <li class="flex items-start">
                   <span class="mr-2" aria-hidden="true">•</span>
@@ -153,15 +162,17 @@
             </ul>
           </section>
 
-          <footer class="w-1/4 text-right">
-            <p class="text-gray-400 text-sm font-medium">Total:</p>
+          <footer class="md:w-1/4 text-right">
+            <p class="text-gray-400 text-xs sm:text-sm font-medium">Total:</p>
             <data
               [value]="budget.totalPrice"
               class="flex items-baseline justify-end gap-1"
               [attr.aria-label]="'Preu total: ' + budget.totalPrice + ' euros'"
             >
-              <span class="text-4xl font-black text-gray-900">{{ budget.totalPrice }}</span>
-              <span class="text-2xl font-bold text-gray-900" aria-hidden="true">€</span>
+              <span class="text-3xl sm:text-4xl font-black text-gray-900">{{
+                budget.totalPrice
+              }}</span>
+              <span class="text-xl sm:text-2xl font-bold text-gray-900" aria-hidden="true">€</span>
             </data>
           </footer>
         </article>
