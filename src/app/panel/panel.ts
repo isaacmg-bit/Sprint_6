@@ -1,6 +1,5 @@
-import { Component, inject, effect, signal, DestroyRef } from '@angular/core';
+import { Component, inject, signal, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BudgetService } from '../services/budget';
 import { PanelFormValues } from '../models/panelformvalues';
 
@@ -15,55 +14,42 @@ const MIN_VALUE = 1;
 })
 export class Panel {
   private readonly budgetService = inject(BudgetService);
-  private readonly destroyRef = inject(DestroyRef);
+
   readonly modalType = signal<keyof PanelFormValues | null>(null);
+
+  @Output() valuesChanged = new EventEmitter<void>();
+
   readonly panelForm = new FormGroup({
     pages: new FormControl<number>(MIN_VALUE, { nonNullable: true }),
     languages: new FormControl<number>(MIN_VALUE, { nonNullable: true }),
   });
 
-  constructor() {
-    this.setupFormSubscription();
-    this.setupSyncEffect();
-  }
-
-private setupFormSubscription(): void {
-  this.panelForm.valueChanges
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe((values) => {
-      this.budgetService.currentPages.set(values.pages ?? MIN_VALUE);
-      this.budgetService.currentLanguages.set(values.languages ?? MIN_VALUE);
-    });
-}
-
-  private setupSyncEffect(): void {
-    effect(() => {
-      this.panelForm.patchValue(
-        {
-          pages: this.budgetService.currentPages(),
-          languages: this.budgetService.currentLanguages(),
-        },
-        { emitEvent: false }
-      );
-    });
-  }
-
   increment(controlName: keyof PanelFormValues): void {
-    this.updateControl(controlName, (value) => value + 1);
+    const control = this.panelForm.get(controlName);
+    if (control) {
+      const newValue = control.value + 1;
+      control.setValue(newValue);
+      this.onValueChange(controlName, newValue);
+    }
   }
 
   decrement(controlName: keyof PanelFormValues): void {
-    this.updateControl(controlName, (value) => (value > MIN_VALUE ? value - 1 : value));
+    const control = this.panelForm.get(controlName);
+    if (control && control.value > MIN_VALUE) {
+      const newValue = control.value - 1;
+      control.setValue(newValue);
+      this.onValueChange(controlName, newValue);
+    }
   }
 
-  private updateControl(
-    controlName: keyof PanelFormValues,
-    updater: (value: number) => number
-  ): void {
-    const control = this.panelForm.get(controlName);
-    if (control) {
-      control.setValue(updater(control.value));
+  private onValueChange(controlName: keyof PanelFormValues, value: number): void {
+    if (controlName === 'pages') {
+      this.budgetService.currentPages.set(value);
+    } else {
+      this.budgetService.currentLanguages.set(value);
     }
+
+    this.valuesChanged.emit();
   }
 
   openModal(type: keyof PanelFormValues): void {

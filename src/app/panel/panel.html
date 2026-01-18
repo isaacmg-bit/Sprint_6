@@ -100,50 +100,50 @@
 </form>
 
 @if (modalType()) {
-<aside
-  class="fixed inset-0 z-50 flex items-center justify-center"
-  role="dialog"
-  aria-modal="true"
-  [attr.aria-labelledby]="'modal-title'"
-  [attr.aria-describedby]="'modal-description'"
->
-  <div
-    (click)="closeModal()"
-    (keydown.escape)="closeModal()"
-    class="absolute inset-0 bg-gray-900/50"
-    aria-hidden="true"
-  ></div>
+  <aside
+    class="fixed inset-0 z-50 flex items-center justify-center"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="'modal-title'"
+    [attr.aria-describedby]="'modal-description'"
+  >
+    <div
+      (click)="closeModal()"
+      (keydown.escape)="closeModal()"
+      class="absolute inset-0 bg-gray-900/50"
+      aria-hidden="true"
+    ></div>
 
-  <article class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 z-10">
-    <header>
-      <h3 id="modal-title" class="text-2xl text-center font-bold text-gray-900 mb-4">
-        {{ modalType() === 'pages' ? 'Número de pàgines' : 'Número de llenguatges' }}
-      </h3>
-    </header>
+    <article class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 z-10">
+      <header>
+        <h3 id="modal-title" class="text-2xl text-center font-bold text-gray-900 mb-4">
+          {{ modalType() === 'pages' ? 'Número de pàgines' : 'Número de llenguatges' }}
+        </h3>
+      </header>
 
-    <section id="modal-description">
-      <p class="text-gray-600 text-center leading-relaxed mb-2">
-        {{
-          modalType() === 'pages'
-            ? 'Afegeix el nombre de pàgines que tindrà el teu projecte.'
-            : 'Afegeix el nombre de llenguatges que tindrà el teu projecte.'
-        }}
-      </p>
-      <p class="text-gray-600 text-center leading-relaxed">
-        El cost de cada {{ modalType() === 'pages' ? 'pàgina' : 'llenguatge' }} és de 30€.
-      </p>
-    </section>
+      <section id="modal-description">
+        <p class="text-gray-600 text-center leading-relaxed mb-2">
+          {{
+            modalType() === 'pages'
+              ? 'Afegeix el nombre de pàgines que tindrà el teu projecte.'
+              : 'Afegeix el nombre de llenguatges que tindrà el teu projecte.'
+          }}
+        </p>
+        <p class="text-gray-600 text-center leading-relaxed">
+          El cost de cada {{ modalType() === 'pages' ? 'pàgina' : 'llenguatge' }} és de 30€.
+        </p>
+      </section>
 
-    <footer class="mt-6 text-center">
-      <button
-        type="button"
-        (click)="closeModal()"
-        class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        aria-label="Tancar diàleg"
-      >
-        Tancar
-      </button>
-    </footer>
-  </article>
-</aside>
+      <footer class="mt-6 text-center">
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          aria-label="Tancar diàleg"
+        >
+          Tancar
+        </button>
+      </footer>
+    </article>
+  </aside>
 }
