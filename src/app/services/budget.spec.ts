@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { BudgetService } from './budget';
 
-describe('Budget', () => {
+describe('BudgetService', () => {
   let service: BudgetService;
 
   beforeEach(() => {
@@ -13,59 +13,67 @@ describe('Budget', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should calculate web extra price correctly', () => {
+  it('should calculate web extra price automatically', () => {
     service.currentPages.set(3);
     service.currentLanguages.set(2);
 
-    const price = service.calculateWebExtra();
-
-    expect(price).toBe(180);
+    expect(service.webExtra()).toBe(180);
   });
 
-  it('should initialize webExtra signal at 0', () => {
-    expect(service.webExtra()).toBe(0);
+  it('should update webExtra when pages change', () => {
+    service.currentPages.set(5);
+    service.currentLanguages.set(1);
+
+    expect(service.webExtra()).toBe(150);
+
+    service.currentPages.set(10);
+    expect(service.webExtra()).toBe(300);
   });
 
-  it('should reset webExtra to 0', () => {
-    service.webExtra.set(500);
+  it('should reset webExtra to default when reset', () => {
+    service.currentPages.set(5);
+    service.currentLanguages.set(3);
+
+    expect(service.webExtra()).toBe(450);
+
     service.resetWebExtra();
-    expect(service.webExtra()).toBe(0);
+
+    expect(service.currentPages()).toBe(1);
+    expect(service.currentLanguages()).toBe(1);
+    expect(service.webExtra()).toBe(30);
   });
 
   it('should calculate total price from selected services and web extra', () => {
     service.selectedServices.set([{ price: 300 } as any, { price: 200 } as any]);
 
-    service.webExtra.set(60);
+    service.currentPages.set(2);
+    service.currentLanguages.set(1);
 
     expect(service.totalPrice()).toBe(560);
   });
-  it('should initialize selected services and webExtra from query params', () => {
-    const budgets = [{ control: 'seo', price: 300 } as any, { control: 'web', price: 500 } as any];
 
+  it('should restore webConfig from query params', () => {
     const params = {
-      seo: 'true',
-      web: 'true',
       pages: '2',
-      languages: '1',
+      languages: '3',
     };
 
-    const result = service.initializeFromQueryParams(params as any, budgets);
+    service.restoreWebConfig(params as any);
 
-    expect(result.length).toBe(2);
-    expect(service.selectedServices().length).toBe(2);
     expect(service.currentPages()).toBe(2);
-    expect(service.currentLanguages()).toBe(1);
-    expect(service.webExtra()).toBe(60);
+    expect(service.currentLanguages()).toBe(3);
+    expect(service.webExtra()).toBe(180);
   });
 
   it('should reset web extra when web is unchecked', () => {
-    service.webExtra.set(120);
     service.currentPages.set(3);
     service.currentLanguages.set(2);
 
+    expect(service.webExtra()).toBe(180);
+
     service.updateSelectedFromForm({ web: false, seo: false, ads: false } as any, []);
 
-    expect(service.webExtra()).toBe(0);
+    expect(service.webExtra()).toBe(30);
     expect(service.currentPages()).toBe(1);
     expect(service.currentLanguages()).toBe(1);
   });
