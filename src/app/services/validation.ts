@@ -32,11 +32,10 @@ export class ValidationService {
     if (!emailRegex.test(email.trim())) {
       return {
         isValid: false,
-        error: 'Email no és vàlid',
+        error: 'El email no és vàlid',
       };
     }
 
-    // 3. Todo correcto
     return { isValid: true, error: '' };
   }
 
