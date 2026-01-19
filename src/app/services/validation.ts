@@ -21,27 +21,28 @@ export class ValidationService {
   }
 
   validateEmail(email: string): ValidationResult {
-    if (!email || !email.includes('@') || !email.includes('.')) {
+    if (!email || !email.trim()) {
       return {
         isValid: false,
-        error: 'Email no és vàlid',
+        error: 'El email és obligatori',
       };
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(email.trim())) {
       return {
         isValid: false,
         error: 'Email no és vàlid',
       };
     }
 
+    // 3. Todo correcto
     return { isValid: true, error: '' };
   }
 
   validatePhone(phone: string): ValidationResult {
     if (!phone || phone.trim() === '') {
-      return { isValid: true, error: '' };
+      return { isValid: false, error: 'El telèfon és obligatori' };
     }
 
     const cleanPhone = phone.replace(/[\s\-()]/g, '');

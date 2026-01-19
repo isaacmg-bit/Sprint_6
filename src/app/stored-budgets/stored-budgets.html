@@ -137,19 +137,21 @@
             </h2>
             <address class="text-gray-400 text-xs sm:text-sm mt-1 not-italic">
               <p>
-                <a>
-                  [href]="'mailto:' + budget.email" class="hover:text-blue-500 focus:outline-none
-                  focus:ring-2 focus:ring-blue-500 rounded break-all" [attr.aria-label]="'Enviar
-                  email a ' + budget.email" >
+                <a
+                  [href]="'mailto:' + budget.email"
+                  class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded break-all"
+                  [attr.aria-label]="'Enviar email a ' + budget.email"
+                >
                   {{ budget.email }}
                 </a>
               </p>
 
               <p>
-                <a>
-                  [href]="'tel:' + budget.phone" class="hover:text-blue-500 focus:outline-none
-                  focus:ring-2 focus:ring-blue-500 rounded" [attr.aria-label]="'Trucar a ' +
-                  budget.phone" >
+                <a
+                  [href]="'tel:' + budget.phone"
+                  class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  [attr.aria-label]="'Trucar a ' + budget.phone"
+                >
                   {{ budget.phone }}
                 </a>
               </p>
