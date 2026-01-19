@@ -198,10 +198,10 @@ npm run test:coverage
 
 ## Screenshots
 
-![Desktop version](./assets/img/Desktop1.png)
-![Desktop version](./assets/img/Desktop2.png)
-![Desktop version](./assets/img/Desktop3.png)
-![Desktop version](./assets/img/Desktop4.png)
+![Desktop version](src/app/assets/img/Desktop1.png)
+![Desktop version](src/app/assets/img/Desktop2.png)
+![Desktop version](src/app/assets/img/Desktop3.png)
+![Desktop version](src/app/assets/img/Desktop4.png)
 
 ---
 
