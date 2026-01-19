@@ -2,48 +2,68 @@
   <h2 class="text-xl font-bold mb-4">Demanar pressupost</h2>
 
   <form
-    class="flex flex-col sm:flex-row gap-3 w-full"
+    class="flex flex-col gap-3 w-full"
     (ngSubmit)="submitBudget()"
     #budgetRequestForm="ngForm"
     aria-label="Formulari de sol·licitud de pressupost"
   >
-    <label for="name-input" class="sr-only">Nom</label>
-    <input
-      id="name-input"
-      type="text"
-      placeholder="Nom"
-      [(ngModel)]="name"
-      name="name"
-      required
-      class="w-full flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    />
+    <div class="flex flex-col sm:flex-row gap-3 w-full">
+      <div class="w-full flex-1">
+        <label for="name-input" class="sr-only">Nom</label>
+        <input
+          id="name-input"
+          type="text"
+          placeholder="Nom"
+          [(ngModel)]="name"
+          name="name"
+          required
+          [class.border-red-500]="nameError()"
+          class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+        @if (nameError()) {
+          <span class="text-red-500 text-xs mt-1 block">{{ nameError() }}</span>
+        }
+      </div>
 
-    <label for="phone-input" class="sr-only">Telèfon</label>
-    <input
-      id="phone-input"
-      type="tel"
-      placeholder="Telèfon"
-      [(ngModel)]="phone"
-      name="phone"
-      required
-      inputmode="numeric"
-      class="w-full flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    />
+      <div class="w-full flex-1">
+        <label for="phone-input" class="sr-only">Telèfon</label>
+        <input
+          id="phone-input"
+          type="tel"
+          placeholder="Telèfon"
+          [(ngModel)]="phone"
+          name="phone"
+          required
+          inputmode="numeric"
+          [class.border-red-500]="phoneError()"
+          class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+        @if (phoneError()) {
+          <span class="text-red-500 text-xs mt-1 block">{{ phoneError() }}</span>
+        }
+      </div>
 
-    <label for="email-input" class="sr-only">Email</label>
-    <input
-      id="email-input"
-      type="email"
-      placeholder="Email"
-      [(ngModel)]="email"
-      name="email"
-      required
-      class="w-full flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    />
+      <div class="w-full flex-1">
+        <label for="email-input" class="sr-only">Email</label>
+        <input
+          id="email-input"
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="email"
+          name="email"
+          required
+          [class.border-red-500]="emailError()"
+          class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+        @if (emailError()) {
+          <span class="text-red-500 text-xs mt-1 block">{{ emailError() }}</span>
+        }
+      </div>
+    </div>
 
     <button
       type="submit"
-      class="w-full sm:w-auto sm:flex-none bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-white px-6 py-2 rounded font-medium transition-colors whitespace-nowrap"
+      class="w-full sm:w-auto sm:self-end bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-white px-6 py-2 rounded font-medium transition-colors whitespace-nowrap"
       aria-label="Sol·licitar pressupost"
     >
       Sol·licitar pressupost
@@ -117,21 +137,19 @@
             </h2>
             <address class="text-gray-400 text-xs sm:text-sm mt-1 not-italic">
               <p>
-                <a
-                  [href]="'mailto:' + budget.email"
-                  class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded break-all"
-                  [attr.aria-label]="'Enviar email a ' + budget.email"
-                >
+                <a>
+                  [href]="'mailto:' + budget.email" class="hover:text-blue-500 focus:outline-none
+                  focus:ring-2 focus:ring-blue-500 rounded break-all" [attr.aria-label]="'Enviar
+                  email a ' + budget.email" >
                   {{ budget.email }}
                 </a>
               </p>
 
               <p>
-                <a
-                  [href]="'tel:' + budget.phone"
-                  class="hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-                  [attr.aria-label]="'Trucar a ' + budget.phone"
-                >
+                <a>
+                  [href]="'tel:' + budget.phone" class="hover:text-blue-500 focus:outline-none
+                  focus:ring-2 focus:ring-blue-500 rounded" [attr.aria-label]="'Trucar a ' +
+                  budget.phone" >
                   {{ budget.phone }}
                 </a>
               </p>

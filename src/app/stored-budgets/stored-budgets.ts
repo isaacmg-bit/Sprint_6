@@ -2,6 +2,7 @@ import { Component, signal, inject, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { BudgetPersonalData } from '../models/budgetpersondata';
+import { ValidationService } from '../services/validation';
 
 type SortCriteria = 'name' | 'price' | 'date';
 type SortOrder = 'ascending' | 'descending';
@@ -17,14 +18,29 @@ export class StoredBudgets {
   phone = '';
   email = '';
 
+  nameError = signal<string>('');
+  emailError = signal<string>('');
+  phoneError = signal<string>('');
+
   sortCriteria = signal<SortCriteria>('name');
   sortOrder = signal<SortOrder>('ascending');
   searchTerm = signal<string>('');
 
   budgetService = inject(BudgetService);
+  validationService = inject(ValidationService);
 
   submitBudget(): void {
-    if (!this.name || !this.email) return;
+    const nameValidation = this.validationService.validateName(this.name);
+    const emailValidation = this.validationService.validateEmail(this.email);
+    const phoneValidation = this.validationService.validatePhone(this.phone);
+
+    this.nameError.set(nameValidation.error);
+    this.emailError.set(emailValidation.error);
+    this.phoneError.set(phoneValidation.error);
+
+    if (!nameValidation.isValid || !emailValidation.isValid || !phoneValidation.isValid) {
+      return;
+    }
 
     const newBudget: BudgetPersonalData = {
       id: crypto.randomUUID(),
@@ -54,7 +70,7 @@ export class StoredBudgets {
   sortedBudgets = computed(() => {
     let budgets = this.budgetService.budgetDB();
     const search = this.searchTerm().toLowerCase();
-    
+
     if (search) {
       budgets = budgets.filter((budget) => budget.name.toLowerCase().includes(search));
     }
