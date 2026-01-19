@@ -1,14 +1,9 @@
 <div class="max-w-2xl w-full mx-auto">
-  <form
-    [formGroup]="budgetForm"
-    class="space-y-4"
-    aria-label="Formulari de pressupostos"
-  >
+  <form [formGroup]="budgetForm" class="space-y-4" aria-label="Formulari de pressupostos">
     @for (budget of budgets(); track budget.id) {
       <fieldset
         class="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-6 transition-all"
-        [class.border-4]="budgetForm.get(budget.control)?.value"
-        [class.border-green-500]="budgetForm.get(budget.control)?.value"
+        [class]="budgetForm.get(budget.control)?.value ? 'border-4 border-green-500' : ''"
       >
         <legend class="sr-only">{{ budget.name }}</legend>
 
@@ -28,16 +23,14 @@
             >
               {{ budget.price }}<span class="text-gray-400 text-2xl" aria-hidden="true">€</span>
             </span>
-            <label
-              [for]="budget.id"
-              class="flex items-center gap-2 cursor-pointer rounded"
-            >
+            <label [for]="budget.id" class="flex items-center gap-2 cursor-pointer rounded">
               <input
                 type="checkbox"
                 [id]="budget.id"
                 [formControlName]="budget.control"
                 (change)="onCheckboxChange()"
                 class="w-4 h-4 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                [attr.aria-labelledby]="'budget-title-' + budget.id"
                 [attr.aria-describedby]="'budget-desc-' + budget.id"
               />
               <span class="text-gray-600 text-sm">Afegir</span>

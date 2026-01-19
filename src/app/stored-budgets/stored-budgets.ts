@@ -8,7 +8,6 @@ type SortOrder = 'ascending' | 'descending';
 
 @Component({
   selector: 'app-stored-budgets',
-  standalone: true,
   imports: [FormsModule],
   templateUrl: './stored-budgets.html',
   styleUrl: './stored-budgets.css',

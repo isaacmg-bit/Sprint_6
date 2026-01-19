@@ -43,27 +43,4 @@ export class BudgetService {
   addBudget(budget: BudgetPersonalData): void {
     this.budgetDB.update((current) => [...current, budget]);
   }
-
-  restoreWebConfig(queryParams: BudgetQueryParams): void {
-    const pages = queryParams['pages'];
-    const languages = queryParams['languages'];
-
-    if (pages) {
-      this.currentPages.set(Number(pages));
-    }
-    if (languages) {
-      this.currentLanguages.set(Number(languages));
-    }
-  }
-
-  updateSelectedFromForm(formValues: BudgetFormValues, availableBudgets: Budgets[]): Budgets[] {
-    const selected = availableBudgets.filter((service) => formValues[service.control]);
-
-    if (!formValues.web) {
-      this.resetWebExtra();
-    }
-
-    this.selectedServices.set(selected);
-    return selected;
-  }
 }

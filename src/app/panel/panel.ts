@@ -7,7 +7,6 @@ const MIN_VALUE = 1;
 
 @Component({
   selector: 'app-panel',
-  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './panel.html',
   styleUrl: './panel.css',
