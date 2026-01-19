@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UrlService } from './url-service';
 import { BudgetService } from './budget';
 import { vi } from 'vitest';
+import { BudgetFormValues } from '../models/budgetformvalues';
 
 describe('UrlService', () => {
   let service: UrlService;
@@ -31,7 +32,7 @@ describe('UrlService', () => {
   });
 
   it('should clear query params when no services are selected', () => {
-    service.updateURL({ seo: false, ads: false, web: false } as any);
+    service.updateURL({ seo: false, ads: false, web: false } as BudgetFormValues);
 
     expect(router.navigate).toHaveBeenCalledWith([], {
       queryParams: {},
@@ -40,7 +41,7 @@ describe('UrlService', () => {
   });
 
   it('should set seo and ads query params', () => {
-    service.updateURL({ seo: true, ads: true, web: false } as any);
+    service.updateURL({ seo: true, ads: true, web: false } as BudgetFormValues);
 
     expect(router.navigate).toHaveBeenCalledWith([], {
       queryParams: {
@@ -55,7 +56,7 @@ describe('UrlService', () => {
     budgetService.currentPages.set(2);
     budgetService.currentLanguages.set(3);
 
-    service.updateURL({ seo: false, ads: false, web: true } as any);
+    service.updateURL({ seo: false, ads: false, web: true } as BudgetFormValues);
 
     expect(router.navigate).toHaveBeenCalledWith([], {
       queryParams: {

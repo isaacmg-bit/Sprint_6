@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StoredBudgets } from './stored-budgets';
 import { BudgetService } from '../services/budget';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { BudgetPersonalData } from '../models/budgetpersondata';
 
 describe('StoredBudgets', () => {
   let component: StoredBudgets;
@@ -71,8 +72,8 @@ describe('StoredBudgets', () => {
 
   it('should sort budgets by name ascending', () => {
     budgetService.budgetDB.set([
-      { name: 'Zacarías', totalPrice: 200, date: new Date() } as any,
-      { name: 'Albertito', totalPrice: 100, date: new Date() } as any,
+      { name: 'Zacarías', totalPrice: 200, date: new Date() } as BudgetPersonalData,
+      { name: 'Albertito', totalPrice: 100, date: new Date() } as BudgetPersonalData,
     ]);
 
     component.sortCriteria.set('name');
@@ -86,9 +87,9 @@ describe('StoredBudgets', () => {
 
   it('should sort budgets by price descending', () => {
     budgetService.budgetDB.set([
-      { name: 'Budget A', totalPrice: 100, date: new Date() } as any,
-      { name: 'Budget B', totalPrice: 500, date: new Date() } as any,
-      { name: 'Budget C', totalPrice: 300, date: new Date() } as any,
+      { name: 'Budget A', totalPrice: 100, date: new Date() } as BudgetPersonalData,
+      { name: 'Budget B', totalPrice: 500, date: new Date() } as BudgetPersonalData,
+      { name: 'Budget C', totalPrice: 300, date: new Date() } as BudgetPersonalData,
     ]);
 
     component.sortCriteria.set('price');
@@ -103,9 +104,9 @@ describe('StoredBudgets', () => {
 
   it('should filter budgets by search term', () => {
     budgetService.budgetDB.set([
-      { name: 'Isaac Malagon', totalPrice: 100, date: new Date() } as any,
-      { name: 'Albertito Garcia', totalPrice: 200, date: new Date() } as any,
-      { name: 'Fernando Alonso', totalPrice: 300, date: new Date() } as any,
+      { name: 'Isaac Malagon', totalPrice: 100, date: new Date() } as BudgetPersonalData,
+      { name: 'Albertito Garcia', totalPrice: 200, date: new Date() } as BudgetPersonalData,
+      { name: 'Fernando Alonso', totalPrice: 300, date: new Date() } as BudgetPersonalData,
     ]);
 
     component.searchTerm.set('isaac');
@@ -118,9 +119,9 @@ describe('StoredBudgets', () => {
 
   it('should filter and sort together', () => {
     budgetService.budgetDB.set([
-      { name: 'Ana Banana', totalPrice: 500, date: new Date() } as any,
-      { name: 'Ana Palangana', totalPrice: 200, date: new Date() } as any,
-      { name: 'Zacarías Rodríguez', totalPrice: 300, date: new Date() } as any,
+      { name: 'Ana Banana', totalPrice: 500, date: new Date() } as BudgetPersonalData,
+      { name: 'Ana Palangana', totalPrice: 200, date: new Date() } as BudgetPersonalData,
+      { name: 'Zacarías Rodríguez', totalPrice: 300, date: new Date() } as BudgetPersonalData,
     ]);
 
     component.searchTerm.set('ana');

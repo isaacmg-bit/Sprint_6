@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { BudgetService } from './budget';
+import { Budgets } from '../models/budgets';
 
 describe('BudgetService', () => {
   let service: BudgetService;
@@ -44,7 +45,7 @@ describe('BudgetService', () => {
   });
 
   it('should calculate total price from selected services and web extra', () => {
-    service.selectedServices.set([{ price: 300 } as any, { price: 200 } as any]);
+    service.selectedServices.set([{ price: 300 } as Budgets, { price: 200 } as Budgets]);
 
     service.currentPages.set(2);
     service.currentLanguages.set(1);
