@@ -9,9 +9,9 @@
 
         <header class="flex items-center justify-between">
           <section class="flex-1">
-            <h3 [id]="'budget-title-' + budget.id" class="text-gray-900 font-bold text-xl mb-1">
+            <p [id]="'budget-title-' + budget.id" class="text-gray-900 font-bold text-xl mb-1">
               {{ budget.name }}
-            </h3>
+            </p>
             <p [id]="'budget-desc-' + budget.id" class="text-gray-500 text-sm leading-tight">
               {{ budget.description }}
             </p>
@@ -21,7 +21,7 @@
               class="text-gray-900 font-bold text-4xl"
               [attr.aria-label]="'Preu: ' + budget.price + ' euros'"
             >
-              {{ budget.price }}<span class="text-gray-400 text-2xl" aria-hidden="true">€</span>
+              {{ budget.price }}<span class="text-gray-700 text-2xl" aria-hidden="true">€</span>
             </span>
             <label [for]="budget.id" class="flex items-center gap-2 cursor-pointer rounded">
               <input
@@ -57,7 +57,7 @@
         class="text-4xl font-bold"
         [attr.aria-label]="'Total: ' + budgetService.totalPrice() + ' euros'"
       >
-        {{ budgetService.totalPrice() }}<span class="text-gray-400" aria-hidden="true">€</span>
+        {{ budgetService.totalPrice() }}<span class="text-gray-700" aria-hidden="true">€</span>
       </span>
     </p>
   </footer>

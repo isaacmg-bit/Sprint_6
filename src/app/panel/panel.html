@@ -9,7 +9,7 @@
     <button
       type="button"
       (click)="openModal('pages')"
-      class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+      class="pi pi-info-circle text-gray-700 hover:text-blue-500 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
       aria-label="Informació sobre el número de pàgines"
       title="Informació sobre el número de pàgines"
     ></button>
@@ -19,7 +19,7 @@
     <section class="flex items-center gap-2">
       <button
         type="button"
-        (click)="decrement('pages')"
+        (click)="incrementDecrement('pages', -1)"
         class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
         aria-label="Reduir número de pàgines"
       ></button>
@@ -35,7 +35,7 @@
 
       <button
         type="button"
-        (click)="increment('pages')"
+        (click)="incrementDecrement('pages', 1)"
         class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
         aria-label="Augmentar número de pàgines"
       ></button>
@@ -48,7 +48,7 @@
     <button
       type="button"
       (click)="openModal('languages')"
-      class="pi pi-info-circle text-gray-400 hover:text-blue-500 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+      class="pi pi-info-circle text-gray-700 hover:text-blue-500 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
       aria-label="Informació sobre el número de llenguatges"
       title="Informació sobre el número de llenguatges"
     ></button>
@@ -60,7 +60,7 @@
     <section class="ml-1.5 flex items-center gap-2">
       <button
         type="button"
-        (click)="decrement('languages')"
+        (click)="incrementDecrement('languages', -1)"
         class="pi pi-minus-circle text-gray-300 hover:text-red-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
         aria-label="Reduir número de llenguatges"
       ></button>
@@ -76,7 +76,7 @@
 
       <button
         type="button"
-        (click)="increment('languages')"
+        (click)="incrementDecrement('languages', 1)"
         class="pi pi-plus-circle text-gray-300 hover:text-green-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
         aria-label="Augmentar número de llenguatges"
       ></button>
@@ -101,9 +101,9 @@
 
     <article class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 z-10">
       <header>
-        <h3 id="modal-title" class="text-2xl text-center font-bold text-gray-900 mb-4">
+        <p id="modal-title" class="text-2xl text-center font-bold text-gray-900 mb-4">
           {{ modalType() === 'pages' ? 'Número de pàgines' : 'Número de llenguatges' }}
-        </h3>
+        </p>
       </header>
 
       <section id="modal-description">

@@ -71,7 +71,7 @@ export class BudgetsList implements OnInit {
     if (params['languages']) {
       this.budgetService.currentLanguages.set(Number(params['languages']));
     }
-    
+
     this.updateSelectedServices();
   }
 
@@ -87,11 +87,8 @@ export class BudgetsList implements OnInit {
 
   private updateSelectedServices(): void {
     const formValue = this.budgetForm.value;
-    const selected: Budgets[] = [];
 
-    if (formValue.seo) selected.push(this.budgets()[0]);
-    if (formValue.ads) selected.push(this.budgets()[1]);
-    if (formValue.web) selected.push(this.budgets()[2]);
+    const selected = this.budgets().filter((budget) => formValue[budget.control]);
 
     this.budgetService.selectedServices.set(selected);
   }

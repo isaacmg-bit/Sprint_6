@@ -1,4 +1,4 @@
-import { Component, inject, signal, Output, EventEmitter } from '@angular/core';
+import { Component, inject, signal, Output, EventEmitter, HostListener } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BudgetService } from '../services/budget';
 import { PanelFormValues } from '../models/panelformvalues';
@@ -23,22 +23,17 @@ export class Panel {
     languages: new FormControl<number>(MIN_VALUE, { nonNullable: true }),
   });
 
-  increment(controlName: keyof PanelFormValues): void {
+  incrementDecrement(controlName: keyof PanelFormValues, value: number): void {
     const control = this.panelForm.get(controlName);
-    if (control) {
-      const newValue = control.value + 1;
-      control.setValue(newValue);
-      this.onValueChange(controlName, newValue);
-    }
-  }
 
-  decrement(controlName: keyof PanelFormValues): void {
-    const control = this.panelForm.get(controlName);
-    if (control && control.value > MIN_VALUE) {
-      const newValue = control.value - 1;
-      control.setValue(newValue);
-      this.onValueChange(controlName, newValue);
-    }
+    if (!control) return;
+
+    const newValue = control.value + value;
+
+    if (newValue < MIN_VALUE) return;
+
+    control.setValue(newValue);
+    this.onValueChange(controlName, newValue);
   }
 
   private onValueChange(controlName: keyof PanelFormValues, value: number): void {
@@ -47,7 +42,7 @@ export class Panel {
     } else {
       this.budgetService.currentLanguages.set(value);
     }
-    
+
     this.valuesChanged.emit();
   }
 
@@ -57,5 +52,12 @@ export class Panel {
 
   closeModal(): void {
     this.modalType.set(null);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    if (this.modalType()) {
+      this.closeModal();
+    }
   }
 }

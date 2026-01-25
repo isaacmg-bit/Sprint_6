@@ -135,7 +135,7 @@
             >
               {{ budget.name }}
             </h2>
-            <address class="text-gray-400 text-xs sm:text-sm mt-1 not-italic">
+            <address class="text-gray-700 text-xs sm:text-sm mt-1 not-italic">
               <p>
                 <a
                   [href]="'mailto:' + budget.email"
@@ -159,12 +159,12 @@
           </header>
 
           <section class="flex-1 md:px-8">
-            <h3
+            <p
               [id]="'services-heading-' + budget.id"
               class="font-bold text-xs sm:text-sm mb-1 text-gray-900"
             >
               Serveis contractats:
-            </h3>
+          </p>
             <ul class="text-xs sm:text-sm text-gray-600">
               @for (service of budget.services; track service.id) {
                 <li class="flex items-start">
@@ -172,7 +172,7 @@
                   <span>
                     {{ service.name }}
                     @if (service.control === 'web' && budget.pages > 0) {
-                      <span class="text-gray-400 text-xs italic">
+                      <span class="text-gray-700 text-xs italic">
                         ({{ budget.pages }} pàgines, {{ budget.languages }} llenguatges)
                       </span>
                     }
@@ -183,7 +183,7 @@
           </section>
 
           <footer class="md:w-1/4 text-right">
-            <p class="text-gray-400 text-xs sm:text-sm font-medium">Total:</p>
+            <p class="text-gray-700 text-xs sm:text-sm font-medium">Total:</p>
             <data
               [value]="budget.totalPrice"
               class="flex items-baseline justify-end gap-1"
